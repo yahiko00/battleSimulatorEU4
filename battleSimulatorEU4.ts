@@ -38,6 +38,90 @@ function sumDefReg() {
   document.getElementById("defTotal").innerHTML = sum.toString();
 } // sumDefReg
 
+function updatePipsAttInf() {
+  var listSelect = <HTMLSelectElement> document.getElementById("listPipsAttInf");
+  var index = listSelect.selectedIndex;
+  var value: string = <string> listSelect.options[index].value;
+  var valArray = value.split(",");
+
+  (<HTMLInputElement> document.getElementsByName("attInfMoralOff")[0]).value = valArray[0];
+  (<HTMLInputElement> document.getElementsByName("attInfMoralDef")[0]).value = valArray[1];
+  (<HTMLInputElement> document.getElementsByName("attInfFireOff")[0]).value = valArray[2];
+  (<HTMLInputElement> document.getElementsByName("attInfFireDef")[0]).value = valArray[3];
+  (<HTMLInputElement> document.getElementsByName("attInfShockOff")[0]).value = valArray[4];
+  (<HTMLInputElement> document.getElementsByName("attInfShockDef")[0]).value = valArray[5];
+} // updatePipsAttInf
+
+function updatePipsDefInf() {
+  var listSelect = <HTMLSelectElement> document.getElementById("listPipsDefInf");
+  var index = listSelect.selectedIndex;
+  var value: string = <string> listSelect.options[index].value;
+  var valArray = value.split(",");
+
+  (<HTMLInputElement> document.getElementsByName("defInfMoralOff")[0]).value = valArray[0];
+  (<HTMLInputElement> document.getElementsByName("defInfMoralDef")[0]).value = valArray[1];
+  (<HTMLInputElement> document.getElementsByName("defInfFireOff")[0]).value = valArray[2];
+  (<HTMLInputElement> document.getElementsByName("defInfFireDef")[0]).value = valArray[3];
+  (<HTMLInputElement> document.getElementsByName("defInfShockOff")[0]).value = valArray[4];
+  (<HTMLInputElement> document.getElementsByName("defInfShockDef")[0]).value = valArray[5];
+} // updatePipsDefInf
+
+function updatePipsAttCav() {
+  var listSelect = <HTMLSelectElement> document.getElementById("listPipsAttCav");
+  var index = listSelect.selectedIndex;
+  var value: string = <string> listSelect.options[index].value;
+  var valArray = value.split(",");
+
+  (<HTMLInputElement> document.getElementsByName("attCavMoralOff")[0]).value = valArray[0];
+  (<HTMLInputElement> document.getElementsByName("attCavMoralDef")[0]).value = valArray[1];
+  (<HTMLInputElement> document.getElementsByName("attCavFireOff")[0]).value = valArray[2];
+  (<HTMLInputElement> document.getElementsByName("attCavFireDef")[0]).value = valArray[3];
+  (<HTMLInputElement> document.getElementsByName("attCavShockOff")[0]).value = valArray[4];
+  (<HTMLInputElement> document.getElementsByName("attCavShockDef")[0]).value = valArray[5];
+} // updatePipsAttCav
+
+function updatePipsDefCav() {
+  var listSelect = <HTMLSelectElement> document.getElementById("listPipsDefCav");
+  var index = listSelect.selectedIndex;
+  var value: string = <string> listSelect.options[index].value;
+  var valArray = value.split(",");
+
+  (<HTMLInputElement> document.getElementsByName("defCavMoralOff")[0]).value = valArray[0];
+  (<HTMLInputElement> document.getElementsByName("defCavMoralDef")[0]).value = valArray[1];
+  (<HTMLInputElement> document.getElementsByName("defCavFireOff")[0]).value = valArray[2];
+  (<HTMLInputElement> document.getElementsByName("defCavFireDef")[0]).value = valArray[3];
+  (<HTMLInputElement> document.getElementsByName("defCavShockOff")[0]).value = valArray[4];
+  (<HTMLInputElement> document.getElementsByName("defCavShockDef")[0]).value = valArray[5];
+} // updatePipsDefCav
+
+function updatePipsAttArt() {
+  var listSelect = <HTMLSelectElement> document.getElementById("listPipsAttArt");
+  var index = listSelect.selectedIndex;
+  var value: string = <string> listSelect.options[index].value;
+  var valArray = value.split(",");
+
+  (<HTMLInputElement> document.getElementsByName("attArtMoralOff")[0]).value = valArray[0];
+  (<HTMLInputElement> document.getElementsByName("attArtMoralDef")[0]).value = valArray[1];
+  (<HTMLInputElement> document.getElementsByName("attArtFireOff")[0]).value = valArray[2];
+  (<HTMLInputElement> document.getElementsByName("attArtFireDef")[0]).value = valArray[3];
+  (<HTMLInputElement> document.getElementsByName("attArtShockOff")[0]).value = valArray[4];
+  (<HTMLInputElement> document.getElementsByName("attArtShockDef")[0]).value = valArray[5];
+} // updatePipsAttArt
+
+function updatePipsDefArt() {
+  var listSelect = <HTMLSelectElement> document.getElementById("listPipsDefArt");
+  var index = listSelect.selectedIndex;
+  var value: string = <string> listSelect.options[index].value;
+  var valArray = value.split(",");
+
+  (<HTMLInputElement> document.getElementsByName("defArtMoralOff")[0]).value = valArray[0];
+  (<HTMLInputElement> document.getElementsByName("defArtMoralDef")[0]).value = valArray[1];
+  (<HTMLInputElement> document.getElementsByName("defArtFireOff")[0]).value = valArray[2];
+  (<HTMLInputElement> document.getElementsByName("defArtFireDef")[0]).value = valArray[3];
+  (<HTMLInputElement> document.getElementsByName("defArtShockOff")[0]).value = valArray[4];
+  (<HTMLInputElement> document.getElementsByName("defArtShockDef")[0]).value = valArray[5];
+} // updatePipsAttArt
+
 function reset() {
 } // reset
 
