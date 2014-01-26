@@ -1,0 +1,48 @@
+body {
+  background-image:url(http://www.unsigneddesign.com/Seamless_background_textures/1200px/seamlesstexture5_1200.jpg);
+}
+
+h1 {
+  text-align: center;
+}
+
+td {
+  text-align: right;
+}
+
+input {
+  text-align: right;
+  width: 3em;
+}
+
+img {
+  width: 1em;
+  height: 1em;
+}
+
+.inputButton {
+  text-align: center;
+  width: auto;
+}
+
+.center {
+  text-align: center;
+}
+
+form {
+  text-align: left;
+}
+
+.layout {
+  padding-left: 3em;
+  vertical-align: top;
+}
+
+td.battle {
+  border-width: 1px;
+  border-style: solid;
+  border-spacing: 2px;
+  border-color: rgb(0, 0, 0);
+  border-collapse: collapse;
+  padding: 0.3em;
+}
