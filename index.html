@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Battle Simulator for Europa Universalis IV</title>
+  <link rel="stylesheet" href="battleSimulatorEU4.css" type="text/css" />
+  <script src="battleSimulatorEU4.js"></script>
+</head>
+<body>
+  <h1>Battle Simulator for Europa Universalis IV</h1>
+  <div align="center"><i>beta release 0.1.1</i></div>
+  <br />
+  <form name="pips">
+    <h3>Pips</h3>
+    <table>
+      <tr>
+        <td></td>
+        <td colspan="8" class="center">Attacker Pips
+          <img src="http://www.eu4wiki.com/images/a/ab/Pips_offensive-08.png" /></td>
+        <td></td>
+        <td colspan="8" class="center">Defender Pips
+          <img src="http://www.eu4wiki.com/images/2/21/Pips_defensive-08.png" /></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="center">Reg.</td>
+        <td colspan="2" class="center">Fire
+          <img src="http://www.eu4wiki.com/images/thumb/2/2c/Icon_fire.png/28px-Icon_fire.png" /></td>
+        <td colspan="2" class="center">Shock
+          <img src="http://www.eu4wiki.com/images/thumb/3/36/Icon_shock.png/28px-Icon_shock.png" /></td>
+        <td colspan="2" class="center">Morale
+          <img src="http://www.eu4wiki.com/images/thumb/b/b8/Land_morale.png/28px-Land_morale.png" /></td>
+        <td></td>
+        <td></td>
+        <td class="center">Reg.</td>
+        <td colspan="2" class="center">Fire
+          <img src="http://www.eu4wiki.com/images/thumb/2/2c/Icon_fire.png/28px-Icon_fire.png" /></td>
+        <td colspan="2" class="center">Shock
+          <img src="http://www.eu4wiki.com/images/thumb/3/36/Icon_shock.png/28px-Icon_shock.png" /></td>
+        <td colspan="2" class="center">Morale
+          <img src="http://www.eu4wiki.com/images/thumb/b/b8/Land_morale.png/28px-Land_morale.png" /></td>
+      </tr>
+      <tr>
+        <td><img src="http://www.eu4wiki.com/images/9/9f/Infantry.png" /></td>
+        <td>
+          <select id="listPipsAttInf" onchange="updatePipsAttInf()">
+            <option value="0,0,0,0,0,0">### INFANTRY ###</option>
+            <option value="0,0,0,0,0,0">--- WESTERN ---</option>
+            <option value="2,0,0,0,0,0">Halberd Infantry </option>
+            <option value="1,1,0,0,0,0">Latin Medieval Infantry</option>
+            <option value="2,2,0,0,1,1">Men at Arms</option>
+            <option value="2,1,0,0,2,1">Longbow</option>
+            <option value="4,1,0,0,2,0">Galloglaigh Infantry</option>
+            <option value="2,4,0,0,1,3">Condotta Infantry</option>
+            <option value="3,5,0,0,1,2">Landsknechten Infantry</option>
+            <option value="5,1,0,0,3,0">Reformed Galloglaigh Infantry</option>
+            <option value="4,6,3,3,2,3">Tercio Infantry</option>
+            <option value="6,3,0,3,4,2">Free Shooter Infantry</option>
+            <option value="7,4,4,3,4,1">Maurician Infantry</option>
+            <option value="5,4,1,3,5,3">Charge Infantry</option>
+            <option value="5,6,4,4,2,4">Reformed Tercio</option>
+            <option value="7,5,5,4,4,3">Gustavian Infantry</option>
+            <option value="8,4,3,4,6,3">Highlanders Infantry</option>
+            <option value="6,8,3,4,2,6">Grenzer Infantry</option>
+            <option value="8,6,6,4,5,4">Caroline Infantry</option>
+            <option value="7,7,5,5,4,4">Line Infantry</option>
+            <option value="8,9,5,5,6,8">White Coat Infantry</option>
+            <option value="9,9,7,6,7,6">Blue Coat Infantry</option>
+            <option value="8,10,6,8,6,6">Red Coat Infantry</option>
+            <option value="10,8,8,7,5,4">Frederickian Infantry</option>
+            <option value="11,9,10,7,8,6">Impulse Infantry</option>
+            <option value="9,11,7,10,6,8">Square Infantry</option>
+            <option value="10,9,9,8,10,8">Jaeger Infantry</option>
+            <option value="10,10,10,10,7,7">Drill Infantry</option>
+            <option value="11,10,11,8,9,8">Mixed Order Infantry</option>
+            <option value="11,10,10,11,9,9">Napoleonic Square</option>
+            <option value='0,0,0,0,0,0'>--- EASTERN ---</option>
+            <option value='1,1,0,0,0,0'>Bardiche Infantry</option>
+            <option value='1,0,0,0,1,0'>Eastern Medieval Infantry</option>
+            <option value='1,2,0,0,1,2'>Eastern Militia</option>
+            <option value='3,4,0,0,1,2'>Pike Infantry</option>
+            <option value='4,5,3,4,2,2'>Defensive Eastern Musketeers</option>
+            <option value='5,4,3,3,3,2'>Offensive Eastern Musketeers</option>
+            <option value='5,5,3,3,2,2'>Soldaty Infantry</option>
+            <option value='4,6,3,3,2,3'>Eastern Tercio</option>
+            <option value='6,4,3,5,3,4'>Petrine Infantry</option>
+            <option value='6,5,4,3,5,3'>Saxon Infantry</option>
+            <option value='8,8,6,6,6,6'>Green Coat Infantry</option>
+            <option value='10,10,7,7,9,9'>Mass Infantry</option>
+            <option value='0,0,0,0,0,0'>--- OTTOMAN ---</option>
+            <option value='2,1,0,0,1,0'>Ottoman Yaya</option>
+            <option value='3,1,0,0,2,2'>Azab Infantry</option>
+            <option value='4,4,0,0,2,2'>Janissary Infantry</option>
+            <option value='5,5,2,3,3,3'>Sekban Infantry</option>
+            <option value='6,5,4,4,4,3'>Reformed Janissary Infantry</option>
+            <option value='7,6,4,5,5,4'>Nizami Cedid Infantry</option>
+            <option value='7,6,7,4,6,4'>Eastern Carabinier</option>
+            <option value='8,8,5,6,6,5'>Eastern New Model Infantry</option>
+            <option value='0,0,0,0,0,0'>--- MUSLIM ---</option>
+            <option value='1,1,0,0,1,0'>Persian Footsoldier</option>
+            <option value='1,0,0,0,1,1'>Mamluk Archer</option>
+            <option value='2,1,0,0,2,1'>Muslim Duel Infantry</option>
+            <option value='3,2,0,0,1,1'>Shamshir Infantry</option>
+            <option value='3,2,2,2,2,1'>Muslim Musketeer</option>
+            <option value='5,4,4,4,4,4'>Afsharid Reformed Infantry</option>
+            <option value='6,4,5,5,5,4'>Muslim Mass Infantry</option>
+            <option value='7,6,5,4,5,3'>Reformed Muslim Musketeer</option>
+            <option value='8,7,6,6,5,5'>Muslim Rifle Infantry</option>
+            <option value='0,0,0,0,0,0'>--- INDIAN ---</option>
+            <option value='1,1,0,0,1,0'>Indian Footsoldier</option>
+            <option value='2,1,1,0,2,1'>Indian Arquebusier</option>
+            <option value='3,2,2,2,2,1'>Toofangchis</option>
+            <option value='2,3,2,3,1,2'>Poligar Infantry</option>
+            <option value='5,3,4,3,3,2'>Akharid Musketeers</option>
+            <option value='4,3,4,2,4,2'>South Indian Infantry</option>
+            <option value='6,4,5,2,5,2'>North Indian Musket Infantry</option>
+            <option value='6,4,5,3,5,3'>Deccani Musket Infantry</option>
+            <option value='5,3,5,2,5,2'>Telingas</option>
+            <option value='7,5,6,3,5,3'>North Indian Sepoy</option>
+            <option value='8,4,6,4,6,4'>Indian Drill Infantry</option>
+            <option value='0,0,0,0,0,0'>--- CHINESE ---</option>
+            <option value='1,1,0,0,1,0'>Asian Longspear</option>
+            <option value='1,1,0,0,1,1'>Asian Longbow</option>
+            <option value='1,0,0,0,1,0'>East Asian Spearmen</option>
+            <option value='2,2,0,0,1,1'>Defensive Asian Footsoldier</option>
+            <option value='2,1,0,0,2,1'>Offensive Asian Footsoldier</option>
+            <option value='4,3,2,2,4,3'>Asian Arquebusier</option>
+            <option value='3,2,3,3,3,2'>Banner Infantry</option>
+            <option value='4,3,4,2,2,1'>Asian Mass Infantry</option>
+            <option value='5,4,4,3,2,2'>Asian Musketeer</option>
+            <option value='6,5,6,3,5,3'>Reformed Asian Musketeer</option>
+            <option value='0,0,0,0,0,0'>--- NOMAD ---</option>
+            <option value='1,1,0,0,1,1'>Eastern Archers</option>
+            <option value='0,0,0,0,0,0'>--- SUB-SAHARIAN ---</option>
+            <option value='1,1,0,0,1,0'>African Clubmen</option>
+            <option value='1,1,0,0,1,0'>African Spearmen</option>
+            <option value='2,1,0,0,1,0'>Bantu Tribal Warriors</option>
+            <option value='1,2,0,0,0,1'>Mali Tribal Warriors</option>
+            <option value='1,1,0,0,1,1'>Niger Kongolese Tribal Warriors</option>
+            <option value='0,3,0,0,0,1'>Songhai Tribal Warriors</option>
+            <option value='3,1,0,0,2,0'>Bantu Plains Warriors</option>
+            <option value='2,2,0,0,1,1'>Niger Kongolese Forest Warriors</option>
+            <option value='2,3,0,0,0,2'>African Hill Warriors</option>
+            <option value='1,4,0,0,0,2'>Ethiopian Mountain Warriors</option>
+            <option value='4,1,2,1,2,1'>Bantu Musketeers</option>
+            <option value='3,3,2,2,1,1'>Niger Kongolese Musketeers</option>
+            <option value='3,4,1,2,0,2'>Adalan Musketeers</option>
+            <option value='2,5,1,2,0,2'>Ethiopian Musketeers</option>
+            <option value='5,2,0,0,4,2'>Zulu Chest and Horn Infantry</option>
+            <option value='5,2,3,2,3,2'>Westernized Bantu Infantry</option>
+            <option value='4,4,3,3,2,2'>Westernized Niger Kongolese Infantry</option>
+            <option value='4,5,2,3,1,3'>Westernized Adalan Infantry</option>
+            <option value='2,5,2,3,1,3'>Westernized Ethiopian Infantry</option>
+            <option value='6,3,4,3,4,3'>African Western Franchise Infantry</option>
+            <option value='5,5,4,4,3,3'>Niger Kongolese Guerrillas</option>
+            <option value='5,6,3,4,4,4'>Adalan Guerrillas</option>
+            <option value='3,7,3,4,2,4'>Ethiopian Guerrillas</option>
+            <option value='0,0,0,0,0,0'>--- NORTH-AMERICAN ---</option>
+            <option value='1,0,0,0,1,0'>Clubmen</option>
+            <option value='1,0,0,0,1,0'>Native American Archer</option>
+            <option value='1,2,0,0,0,1'>Ambush Infantry</option>
+            <option value='2,1,0,0,1,0'>American Plains Warriors</option>
+            <option value='3,1,1,0,1,0'>Algonkin Tomahawk Warriors</option>
+            <option value='4,2,2,1,1,0'>Native American Arquebusier</option>
+            <option value='3,3,2,1,2,1'>Creek Arquebusier</option>
+            <option value='2,4,2,4,1,2'>Native American Mountain Warriors</option>
+            <option value='5,3,5,2,2,1'>Rifle Scout Infantry</option>
+            <option value='7,5,7,3,7,3'>American Westernized Infantry</option>
+            <option value='7,4,4,3,4,2'>North American Guerrillas</option>
+            <option value='0,0,0,0,0,0'>--- MESOAMERICAN ---</option>
+            <option value='2,1,0,0,1,0'>American Plains Warriors</option>
+            <option value='2,3,0,0,0,2'>Reformed American Hill Warriors</option>
+            <option value='2,2,0,0,2,2'>Reformed American Forest Warriors</option>
+            <option value='3,1,0,0,2,0'>Reformed American Plains Warriors</option>
+            <option value='3,4,1,2,0,2'>American Hill Musketeers</option>
+            <option value='3,3,1,1,2,2'>American Forest Musketeers</option>
+            <option value='4,1,2,1,1,1'>Offensive American Musketeers</option>
+            <option value='4,5,2,3,1,3'>Westernized American Hill Infantry</option>
+            <option value='4,4,3,3,2,2'>Westernized Central American Infantry</option>
+            <option value='5,2,2,2,3,2'>Westernized American Plains Infantry</option>
+            <option value='5,6,3,4,2,3'>Central American Guerrillas</option>
+            <option value='5,5,4,4,3,3'>American Guerrilla Warfare</option>
+            <option value='0,0,0,0,0,0'>--- SOUTH AMERICAN ---</option>
+            <option value='1,1,0,0,1,0'>South American Spearmen</option>
+            <option value='0,3,0,0,0,1'>American Mountain Warriors</option>
+            <option value='1,4,0,0,0,1'>Reformed Mountain Warriors</option>
+            <option value='1,4,0,0,0,2'>Reformed Inca Mountain Warriors</option>
+            <option value='2,2,0,0,2,2'>South American Forest Warriors</option>
+            <option value='2,2,1,1,0,0'>Incan Slingshots</option>
+            <option value='2,3,0,0,2,2'>Incan Axemen</option>
+            <option value='2,5,1,2,0,2'>Defensive American Musketeers</option>
+            <option value='3,3,1,1,2,2'>Reformed American Musketeers</option>
+            <option value='3,4,1,2,0,2'>South American Arquebusier</option>
+            <option value='2,6,2,3,1,3'>Westernized South American Infantry</option>
+            <option value='4,4,3,3,2,2'>Westernized Incan Infantry</option>
+            <option value='4,5,2,3,1,3'>Reformed Westernized Incan Infantry</option>
+            <option value='3,7,3,4,2,4'>South American Guerrilla</option>
+            <option value='5,5,4,4,3,3'>Incan Guerrillas</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" name="attInfReg" value="0" onchange="sumAttReg()"></td>
+        <td>
+          <input type="number" name="attInfFireOff" value="0"></td>
+        <td>
+          <input type="number" name="attInfFireDef" value="0"></td>
+        <td>
+          <input type="number" name="attInfShockOff" value="0"></td>
+        <td>
+          <input type="number" name="attInfShockDef" value="0"></td>
+        <td>
+          <input type="number" name="attInfMoralOff" value="0"></td>
+        <td>
+          <input type="number" name="attInfMoralDef" value="0"></td>
+        <td></td>
+        <td>
+          <select id="listPipsDefInf" onchange="updatePipsDefInf()">
+            <option value="0,0,0,0,0,0">### INFANTRY ###</option>
+            <option value="0,0,0,0,0,0">--- WESTERN ---</option>
+            <option value="2,0,0,0,0,0">Halberd Infantry </option>
+            <option value="1,1,0,0,0,0">Latin Medieval Infantry</option>
+            <option value="2,2,0,0,1,1">Men at Arms</option>
+            <option value="2,1,0,0,2,1">Longbow</option>
+            <option value="4,1,0,0,2,0">Galloglaigh Infantry</option>
+            <option value="2,4,0,0,1,3">Condotta Infantry</option>
+            <option value="3,5,0,0,1,2">Landsknechten Infantry</option>
+            <option value="5,1,0,0,3,0">Reformed Galloglaigh Infantry</option>
+            <option value="4,6,3,3,2,3">Tercio Infantry</option>
+            <option value="6,3,0,3,4,2">Free Shooter Infantry</option>
+            <option value="7,4,4,3,4,1">Maurician Infantry</option>
+            <option value="5,4,1,3,5,3">Charge Infantry</option>
+            <option value="5,6,4,4,2,4">Reformed Tercio</option>
+            <option value="7,5,5,4,4,3">Gustavian Infantry</option>
+            <option value="8,4,3,4,6,3">Highlanders Infantry</option>
+            <option value="6,8,3,4,2,6">Grenzer Infantry</option>
+            <option value="8,6,6,4,5,4">Caroline Infantry</option>
+            <option value="7,7,5,5,4,4">Line Infantry</option>
+            <option value="8,9,5,5,6,8">White Coat Infantry</option>
+            <option value="9,9,7,6,7,6">Blue Coat Infantry</option>
+            <option value="8,10,6,8,6,6">Red Coat Infantry</option>
+            <option value="10,8,8,7,5,4">Frederickian Infantry</option>
+            <option value="11,9,10,7,8,6">Impulse Infantry</option>
+            <option value="9,11,7,10,6,8">Square Infantry</option>
+            <option value="10,9,9,8,10,8">Jaeger Infantry</option>
+            <option value="10,10,10,10,7,7">Drill Infantry</option>
+            <option value="11,10,11,8,9,8">Mixed Order Infantry</option>
+            <option value="11,10,10,11,9,9">Napoleonic Square</option>
+            <option value='0,0,0,0,0,0'>--- EASTERN ---</option>
+            <option value='1,1,0,0,0,0'>Bardiche Infantry</option>
+            <option value='1,0,0,0,1,0'>Eastern Medieval Infantry</option>
+            <option value='1,2,0,0,1,2'>Eastern Militia</option>
+            <option value='3,4,0,0,1,2'>Pike Infantry</option>
+            <option value='4,5,3,4,2,2'>Defensive Eastern Musketeers</option>
+            <option value='5,4,3,3,3,2'>Offensive Eastern Musketeers</option>
+            <option value='5,5,3,3,2,2'>Soldaty Infantry</option>
+            <option value='4,6,3,3,2,3'>Eastern Tercio</option>
+            <option value='6,4,3,5,3,4'>Petrine Infantry</option>
+            <option value='6,5,4,3,5,3'>Saxon Infantry</option>
+            <option value='8,8,6,6,6,6'>Green Coat Infantry</option>
+            <option value='10,10,7,7,9,9'>Mass Infantry</option>
+            <option value='0,0,0,0,0,0'>--- OTTOMAN ---</option>
+            <option value='2,1,0,0,1,0'>Ottoman Yaya</option>
+            <option value='3,1,0,0,2,2'>Azab Infantry</option>
+            <option value='4,4,0,0,2,2'>Janissary Infantry</option>
+            <option value='5,5,2,3,3,3'>Sekban Infantry</option>
+            <option value='6,5,4,4,4,3'>Reformed Janissary Infantry</option>
+            <option value='7,6,4,5,5,4'>Nizami Cedid Infantry</option>
+            <option value='7,6,7,4,6,4'>Eastern Carabinier</option>
+            <option value='8,8,5,6,6,5'>Eastern New Model Infantry</option>
+            <option value='0,0,0,0,0,0'>--- MUSLIM ---</option>
+            <option value='1,1,0,0,1,0'>Persian Footsoldier</option>
+            <option value='1,0,0,0,1,1'>Mamluk Archer</option>
+            <option value='2,1,0,0,2,1'>Muslim Duel Infantry</option>
+            <option value='3,2,0,0,1,1'>Shamshir Infantry</option>
+            <option value='3,2,2,2,2,1'>Muslim Musketeer</option>
+            <option value='5,4,4,4,4,4'>Afsharid Reformed Infantry</option>
+            <option value='6,4,5,5,5,4'>Muslim Mass Infantry</option>
+            <option value='7,6,5,4,5,3'>Reformed Muslim Musketeer</option>
+            <option value='8,7,6,6,5,5'>Muslim Rifle Infantry</option>
+            <option value='0,0,0,0,0,0'>--- INDIAN ---</option>
+            <option value='1,1,0,0,1,0'>Indian Footsoldier</option>
+            <option value='2,1,1,0,2,1'>Indian Arquebusier</option>
+            <option value='3,2,2,2,2,1'>Toofangchis</option>
+            <option value='2,3,2,3,1,2'>Poligar Infantry</option>
+            <option value='5,3,4,3,3,2'>Akharid Musketeers</option>
+            <option value='4,3,4,2,4,2'>South Indian Infantry</option>
+            <option value='6,4,5,2,5,2'>North Indian Musket Infantry</option>
+            <option value='6,4,5,3,5,3'>Deccani Musket Infantry</option>
+            <option value='5,3,5,2,5,2'>Telingas</option>
+            <option value='7,5,6,3,5,3'>North Indian Sepoy</option>
+            <option value='8,4,6,4,6,4'>Indian Drill Infantry</option>
+            <option value='0,0,0,0,0,0'>--- CHINESE ---</option>
+            <option value='1,1,0,0,1,0'>Asian Longspear</option>
+            <option value='1,1,0,0,1,1'>Asian Longbow</option>
+            <option value='1,0,0,0,1,0'>East Asian Spearmen</option>
+            <option value='2,2,0,0,1,1'>Defensive Asian Footsoldier</option>
+            <option value='2,1,0,0,2,1'>Offensive Asian Footsoldier</option>
+            <option value='4,3,2,2,4,3'>Asian Arquebusier</option>
+            <option value='3,2,3,3,3,2'>Banner Infantry</option>
+            <option value='4,3,4,2,2,1'>Asian Mass Infantry</option>
+            <option value='5,4,4,3,2,2'>Asian Musketeer</option>
+            <option value='6,5,6,3,5,3'>Reformed Asian Musketeer</option>
+            <option value='0,0,0,0,0,0'>--- NOMAD ---</option>
+            <option value='1,1,0,0,1,1'>Eastern Archers</option>
+            <option value='0,0,0,0,0,0'>--- SUB-SAHARIAN ---</option>
+            <option value='1,1,0,0,1,0'>African Clubmen</option>
+            <option value='1,1,0,0,1,0'>African Spearmen</option>
+            <option value='2,1,0,0,1,0'>Bantu Tribal Warriors</option>
+            <option value='1,2,0,0,0,1'>Mali Tribal Warriors</option>
+            <option value='1,1,0,0,1,1'>Niger Kongolese Tribal Warriors</option>
+            <option value='0,3,0,0,0,1'>Songhai Tribal Warriors</option>
+            <option value='3,1,0,0,2,0'>Bantu Plains Warriors</option>
+            <option value='2,2,0,0,1,1'>Niger Kongolese Forest Warriors</option>
+            <option value='2,3,0,0,0,2'>African Hill Warriors</option>
+            <option value='1,4,0,0,0,2'>Ethiopian Mountain Warriors</option>
+            <option value='4,1,2,1,2,1'>Bantu Musketeers</option>
+            <option value='3,3,2,2,1,1'>Niger Kongolese Musketeers</option>
+            <option value='3,4,1,2,0,2'>Adalan Musketeers</option>
+            <option value='2,5,1,2,0,2'>Ethiopian Musketeers</option>
+            <option value='5,2,0,0,4,2'>Zulu Chest and Horn Infantry</option>
+            <option value='5,2,3,2,3,2'>Westernized Bantu Infantry</option>
+            <option value='4,4,3,3,2,2'>Westernized Niger Kongolese Infantry</option>
+            <option value='4,5,2,3,1,3'>Westernized Adalan Infantry</option>
+            <option value='2,5,2,3,1,3'>Westernized Ethiopian Infantry</option>
+            <option value='6,3,4,3,4,3'>African Western Franchise Infantry</option>
+            <option value='5,5,4,4,3,3'>Niger Kongolese Guerrillas</option>
+            <option value='5,6,3,4,4,4'>Adalan Guerrillas</option>
+            <option value='3,7,3,4,2,4'>Ethiopian Guerrillas</option>
+            <option value='0,0,0,0,0,0'>--- NORTH-AMERICAN ---</option>
+            <option value='1,0,0,0,1,0'>Clubmen</option>
+            <option value='1,0,0,0,1,0'>Native American Archer</option>
+            <option value='1,2,0,0,0,1'>Ambush Infantry</option>
+            <option value='2,1,0,0,1,0'>American Plains Warriors</option>
+            <option value='3,1,1,0,1,0'>Algonkin Tomahawk Warriors</option>
+            <option value='4,2,2,1,1,0'>Native American Arquebusier</option>
+            <option value='3,3,2,1,2,1'>Creek Arquebusier</option>
+            <option value='2,4,2,4,1,2'>Native American Mountain Warriors</option>
+            <option value='5,3,5,2,2,1'>Rifle Scout Infantry</option>
+            <option value='7,5,7,3,7,3'>American Westernized Infantry</option>
+            <option value='7,4,4,3,4,2'>North American Guerrillas</option>
+            <option value='0,0,0,0,0,0'>--- MESOAMERICAN ---</option>
+            <option value='2,1,0,0,1,0'>American Plains Warriors</option>
+            <option value='2,3,0,0,0,2'>Reformed American Hill Warriors</option>
+            <option value='2,2,0,0,2,2'>Reformed American Forest Warriors</option>
+            <option value='3,1,0,0,2,0'>Reformed American Plains Warriors</option>
+            <option value='3,4,1,2,0,2'>American Hill Musketeers</option>
+            <option value='3,3,1,1,2,2'>American Forest Musketeers</option>
+            <option value='4,1,2,1,1,1'>Offensive American Musketeers</option>
+            <option value='4,5,2,3,1,3'>Westernized American Hill Infantry</option>
+            <option value='4,4,3,3,2,2'>Westernized Central American Infantry</option>
+            <option value='5,2,2,2,3,2'>Westernized American Plains Infantry</option>
+            <option value='5,6,3,4,2,3'>Central American Guerrillas</option>
+            <option value='5,5,4,4,3,3'>American Guerrilla Warfare</option>
+            <option value='0,0,0,0,0,0'>--- SOUTH AMERICAN ---</option>
+            <option value='1,1,0,0,1,0'>South American Spearmen</option>
+            <option value='0,3,0,0,0,1'>American Mountain Warriors</option>
+            <option value='1,4,0,0,0,1'>Reformed Mountain Warriors</option>
+            <option value='1,4,0,0,0,2'>Reformed Inca Mountain Warriors</option>
+            <option value='2,2,0,0,2,2'>South American Forest Warriors</option>
+            <option value='2,2,1,1,0,0'>Incan Slingshots</option>
+            <option value='2,3,0,0,2,2'>Incan Axemen</option>
+            <option value='2,5,1,2,0,2'>Defensive American Musketeers</option>
+            <option value='3,3,1,1,2,2'>Reformed American Musketeers</option>
+            <option value='3,4,1,2,0,2'>South American Arquebusier</option>
+            <option value='2,6,2,3,1,3'>Westernized South American Infantry</option>
+            <option value='4,4,3,3,2,2'>Westernized Incan Infantry</option>
+            <option value='4,5,2,3,1,3'>Reformed Westernized Incan Infantry</option>
+            <option value='3,7,3,4,2,4'>South American Guerrilla</option>
+            <option value='5,5,4,4,3,3'>Incan Guerrillas</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" name="defInfReg" value="0" onchange="sumDefReg()"></td>
+        <td>
+          <input type="number" name="defInfFireOff" value="0"></td>
+        <td>
+          <input type="number" name="defInfFireDef" value="0"></td>
+        <td>
+          <input type="number" name="defInfShockOff" value="0"></td>
+        <td>
+          <input type="number" name="defInfShockDef" value="0"></td>
+        <td>
+          <input type="number" name="defInfMoralOff" value="0"></td>
+        <td>
+          <input type="number" name="defInfMoralDef" value="0"></td>
+      </tr>
+      <tr>
+        <td><img src="http://www.eu4wiki.com/images/1/15/Cavalry.png" /></td>
+        <td>
+          <select id="listPipsAttCav" onchange="updatePipsAttCav()">
+            <option value="0,0,0,0,0,0">### CAVALRY ###</option>
+            <option value='0,0,0,0,0,0'>--- WESTERN ---</option>
+            <option value='2,0,0,0,2,0'>Chevauchée</option>
+            <option value='1,1,0,0,1,0'>Western Medieval Knights</option>
+            <option value='2,1,1,0,2,1'>Schwarze Reiter</option>
+            <option value='2,2,2,0,3,2'>Latin Caracole Cavalry</option>
+            <option value='4,2,0,0,4,2'>Gallop Cavalry</option>
+            <option value='5,3,3,5,5,4'>Armee Blanche Cavalry</option>
+            <option value='5,5,5,4,2,2'>Latin Dragoons</option>
+            <option value='4,4,4,4,4,4'>Latin Hussars</option>
+            <option value='8,6,4,5,9,7'>Latin Cuirassiers</option>
+            <option value='7,7,7,6,5,4'>Carabiners</option>
+            <option value='8,8,5,5,7,6'>Uhlan</option>
+            <option value='8,7,5,7,5,7'>Reformed Latin Hussars</option>
+            <option value='11,8,10,8,10,8'>Latin Chasseur</option>
+            <option value='11,8,11,8,10,8'>Latin Lancers</option>
+            <option value='0,0,0,0,0,0'>--- EASTERN ---</option>
+            <option value='1,1,0,0,1,0'>Eastern Knights</option>
+            <option value='2,1,0,0,0,0'>Druzhina Cavalry</option>
+            <option value='2,1,0,0,2,1'>Stratioti Cavalry</option>
+            <option value='3,2,0,0,2,1'>Eastern Hussar</option>
+            <option value='4,2,0,0,3,2'>Reformed Eastern Hussar</option>
+            <option value='2,2,2,0,3,2'>Eastern Caracole</option>
+            <option value='3,3,2,2,3,2'>Southern Cossacks</option>
+            <option value='5,2,0,0,4,2'>Winged Hussars</option>
+            <option value='4,3,2,2,3,2'>Cossack Cavalry</option>
+            <option value='7,5,0,0,7,5'>Lancers</option>
+            <option value='5,4,4,4,4,3'>Reformed Cossack Cavalry</option>
+            <option value='8,6,3,4,8,6'>Eastern Cuirassiers</option>
+            <option value='8,5,6,4,5,4'>Advanced Cossack Cavalry</option>
+            <option value='0,0,0,0,0,0'>--- OTTOMAN ---</option>
+            <option value='2,1,1,0,1,0'>Musellem Cavalry</option>
+            <option value='2,2,0,0,2,2'>Timariot Cavalry</option>
+            <option value='3,2,0,0,3,1'>Spahi Cavalry</option>
+            <option value='4,3,3,1,3,1'>Reformed Spahi Cavalry</option>
+            <option value='6,4,5,2,5,2'>Toprakli Hit and Run Cavalry</option>
+            <option value='7,7,4,3,4,3'>Toprakli Dragoons</option>
+            <option value='7,4,7,4,5,3'>Eastern Skirmisher</option>
+            <option value='8,6,5,2,7,6'>Eastern Uhlan</option>
+            <option value='9,7,0,0,9,5'>Reformed Lancer</option>
+            <option value='0,0,0,0,0,0'>--- MUSLIM ---</option>
+            <option value='2,1,1,0,2,0'>Muslim Cavalry Archers</option>
+            <option value='2,1,0,0,2,1'>Persian Cavalry Charge</option>
+            <option value='2,0,0,0,3,1'>Mamluk Cavalry Charge</option>
+            <option value='2,2,0,0,3,1'>Shayhanid Cavalry</option>
+            <option value='3,2,0,0,3,2'>Qizilhash Cavalry</option>
+            <option value='3,2,2,1,3,2'>Muslim Musketeer Cavalry</option>
+            <option value='5,4,3,3,3,2'>Musket Charge Cavalry</option>
+            <option value='5,4,4,3,5,4'>Afsharid Reformed Cavalry</option>
+            <option value='7,6,6,4,6,5'>Ali Bey Reformed Cavalry</option>
+            <option value='6,6,5,4,2,2'>Muslim Dragoon</option>
+            <option value='7,5,5,4,5,4'>Durrani Swivel Cavalry</option>
+            <option value='7,4,7,6,4,3'>Durrani Cavalry</option>
+            <option value='0,0,0,0,0,0'>--- INDIAN ---</option>
+            <option value='2,1,0,0,1,0'>Indian Cavalry Archers</option>
+            <option value='1,2,0,0,0,2'>Indian Cavalry</option>
+            <option value='3,2,3,2,2,1'>Indian Cavalry Archers</option>
+            <option value='3,3,2,1,3,1'>Mansabdar Cavalry</option>
+            <option value='5,2,2,1,5,2'>Deccani Light Cavalry</option>
+            <option value='5,3,4,2,4,2'>Dai-Phat Cavalry</option>
+            <option value='5,2,5,2,5,2'>Maratha Raiders</option>
+            <option value='6,4,6,5,5,4'>Sowars</option>
+            <option value='7,6,6,4,6,3'>Mysorean Light Cavalry</option>
+            <option value='0,0,0,0,0,0'>--- CHINESE ---</option>
+            <option value='1,0,0,0,1,1'>Archer Cavalry</option>
+            <option value='2,0,0,0,1,0'>Eastern Bow Tactics</option>
+            <option value='2,1,0,0,2,1'>Asian Steppe Cavalry</option>
+            <option value='2,1,0,0,1,2'>Samurai Cavalry</option>
+            <option value='2,1,2,1,2,1'>Reformed Asian Steppe Cavalry</option>
+            <option value='5,4,3,2,5,3'>Asian Charge Cavalry</option>
+            <option value='4,5,4,5,3,2'>Banner Cavalry</option>
+            <option value='6,5,5,4,2,2'>Asian Dragoons</option>
+            <option value='8,5,5,4,5,4'>Reformed Asian Cavalry</option>
+            <option value='8,6,6,5,7,4'>Green Standard Cavalry</option>
+            <option value='0,0,0,0,0,0'>--- NOMAD ---</option>
+            <option value='2,1,0,0,2,1'>Mongol Swarm</option>
+            <option value='2,2,0,0,2,1'>Mongol Steppe</option>
+            <option value='0,0,0,0,0,0'>--- SUB-SAHARIAN ---</option>
+            <option value='2,1,0,0,1,0'>Somali Light Cavalry</option>
+            <option value='1,1,0,0,1,1'>Mandelaku Cavalry</option>
+            <option value='1,2,0,0,3,2'>Abyssinian Barded Cavalry</option>
+            <option value='3,2,0,0,2,1'>Tuareg Cavalry</option>
+            <option value='4,2,0,0,4,2'>Mossi Horsemen</option>
+            <option value='4,2,2,2,4,2'>African Dragoon</option>
+            <option value='6,6,4,4,2,2'>African Hussar</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" name="attCavReg" value="0" onchange="sumAttReg()"></td>
+        <td>
+          <input type="number" name="attCavFireOff" value="0"></td>
+        <td>
+          <input type="number" name="attCavFireDef" value="0"></td>
+        <td>
+          <input type="number" name="attCavShockOff" value="0"></td>
+        <td>
+          <input type="number" name="attCavShockDef" value="0"></td>
+        <td>
+          <input type="number" name="attCavMoralOff" value="0"></td>
+        <td>
+          <input type="number" name="attCavMoralDef" value="0"></td>
+        <td></td>
+        <td>
+          <select id="listPipsDefCav" onchange="updatePipsDefCav()">
+            <option value="0,0,0,0,0,0">### CAVALRY ###</option>
+            <option value='0,0,0,0,0,0'>--- WESTERN ---</option>
+            <option value='2,0,0,0,2,0'>Chevauchée</option>
+            <option value='1,1,0,0,1,0'>Western Medieval Knights</option>
+            <option value='2,1,1,0,2,1'>Schwarze Reiter</option>
+            <option value='2,2,2,0,3,2'>Latin Caracole Cavalry</option>
+            <option value='4,2,0,0,4,2'>Gallop Cavalry</option>
+            <option value='5,3,3,5,5,4'>Armee Blanche Cavalry</option>
+            <option value='5,5,5,4,2,2'>Latin Dragoons</option>
+            <option value='4,4,4,4,4,4'>Latin Hussars</option>
+            <option value='8,6,4,5,9,7'>Latin Cuirassiers</option>
+            <option value='7,7,7,6,5,4'>Carabiners</option>
+            <option value='8,8,5,5,7,6'>Uhlan</option>
+            <option value='8,7,5,7,5,7'>Reformed Latin Hussars</option>
+            <option value='11,8,10,8,10,8'>Latin Chasseur</option>
+            <option value='11,8,11,8,10,8'>Latin Lancers</option>
+            <option value='0,0,0,0,0,0'>--- EASTERN ---</option>
+            <option value='1,1,0,0,1,0'>Eastern Knights</option>
+            <option value='2,1,0,0,0,0'>Druzhina Cavalry</option>
+            <option value='2,1,0,0,2,1'>Stratioti Cavalry</option>
+            <option value='3,2,0,0,2,1'>Eastern Hussar</option>
+            <option value='4,2,0,0,3,2'>Reformed Eastern Hussar</option>
+            <option value='2,2,2,0,3,2'>Eastern Caracole</option>
+            <option value='3,3,2,2,3,2'>Southern Cossacks</option>
+            <option value='5,2,0,0,4,2'>Winged Hussars</option>
+            <option value='4,3,2,2,3,2'>Cossack Cavalry</option>
+            <option value='7,5,0,0,7,5'>Lancers</option>
+            <option value='5,4,4,4,4,3'>Reformed Cossack Cavalry</option>
+            <option value='8,6,3,4,8,6'>Eastern Cuirassiers</option>
+            <option value='8,5,6,4,5,4'>Advanced Cossack Cavalry</option>
+            <option value='0,0,0,0,0,0'>--- OTTOMAN ---</option>
+            <option value='2,1,1,0,1,0'>Musellem Cavalry</option>
+            <option value='2,2,0,0,2,2'>Timariot Cavalry</option>
+            <option value='3,2,0,0,3,1'>Spahi Cavalry</option>
+            <option value='4,3,3,1,3,1'>Reformed Spahi Cavalry</option>
+            <option value='6,4,5,2,5,2'>Toprakli Hit and Run Cavalry</option>
+            <option value='7,7,4,3,4,3'>Toprakli Dragoons</option>
+            <option value='7,4,7,4,5,3'>Eastern Skirmisher</option>
+            <option value='8,6,5,2,7,6'>Eastern Uhlan</option>
+            <option value='9,7,0,0,9,5'>Reformed Lancer</option>
+            <option value='0,0,0,0,0,0'>--- MUSLIM ---</option>
+            <option value='2,1,1,0,2,0'>Muslim Cavalry Archers</option>
+            <option value='2,1,0,0,2,1'>Persian Cavalry Charge</option>
+            <option value='2,0,0,0,3,1'>Mamluk Cavalry Charge</option>
+            <option value='2,2,0,0,3,1'>Shayhanid Cavalry</option>
+            <option value='3,2,0,0,3,2'>Qizilhash Cavalry</option>
+            <option value='3,2,2,1,3,2'>Muslim Musketeer Cavalry</option>
+            <option value='5,4,3,3,3,2'>Musket Charge Cavalry</option>
+            <option value='5,4,4,3,5,4'>Afsharid Reformed Cavalry</option>
+            <option value='7,6,6,4,6,5'>Ali Bey Reformed Cavalry</option>
+            <option value='6,6,5,4,2,2'>Muslim Dragoon</option>
+            <option value='7,5,5,4,5,4'>Durrani Swivel Cavalry</option>
+            <option value='7,4,7,6,4,3'>Durrani Cavalry</option>
+            <option value='0,0,0,0,0,0'>--- INDIAN ---</option>
+            <option value='2,1,0,0,1,0'>Indian Cavalry Archers</option>
+            <option value='1,2,0,0,0,2'>Indian Cavalry</option>
+            <option value='3,2,3,2,2,1'>Indian Cavalry Archers</option>
+            <option value='3,3,2,1,3,1'>Mansabdar Cavalry</option>
+            <option value='5,2,2,1,5,2'>Deccani Light Cavalry</option>
+            <option value='5,3,4,2,4,2'>Dai-Phat Cavalry</option>
+            <option value='5,2,5,2,5,2'>Maratha Raiders</option>
+            <option value='6,4,6,5,5,4'>Sowars</option>
+            <option value='7,6,6,4,6,3'>Mysorean Light Cavalry</option>
+            <option value='0,0,0,0,0,0'>--- CHINESE ---</option>
+            <option value='1,0,0,0,1,1'>Archer Cavalry</option>
+            <option value='2,0,0,0,1,0'>Eastern Bow Tactics</option>
+            <option value='2,1,0,0,2,1'>Asian Steppe Cavalry</option>
+            <option value='2,1,0,0,1,2'>Samurai Cavalry</option>
+            <option value='2,1,2,1,2,1'>Reformed Asian Steppe Cavalry</option>
+            <option value='5,4,3,2,5,3'>Asian Charge Cavalry</option>
+            <option value='4,5,4,5,3,2'>Banner Cavalry</option>
+            <option value='6,5,5,4,2,2'>Asian Dragoons</option>
+            <option value='8,5,5,4,5,4'>Reformed Asian Cavalry</option>
+            <option value='8,6,6,5,7,4'>Green Standard Cavalry</option>
+            <option value='0,0,0,0,0,0'>--- NOMAD ---</option>
+            <option value='2,1,0,0,2,1'>Mongol Swarm</option>
+            <option value='2,2,0,0,2,1'>Mongol Steppe</option>
+            <option value='0,0,0,0,0,0'>--- SUB-SAHARIAN ---</option>
+            <option value='2,1,0,0,1,0'>Somali Light Cavalry</option>
+            <option value='1,1,0,0,1,1'>Mandelaku Cavalry</option>
+            <option value='1,2,0,0,3,2'>Abyssinian Barded Cavalry</option>
+            <option value='3,2,0,0,2,1'>Tuareg Cavalry</option>
+            <option value='4,2,0,0,4,2'>Mossi Horsemen</option>
+            <option value='4,2,2,2,4,2'>African Dragoon</option>
+            <option value='6,6,4,4,2,2'>African Hussar</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" name="defCavReg" value="0" onchange="sumDefReg()"></td>
+        <td>
+          <input type="number" name="defCavFireOff" value="0"></td>
+        <td>
+          <input type="number" name="defCavFireDef" value="0"></td>
+        <td>
+          <input type="number" name="defCavShockOff" value="0"></td>
+        <td>
+          <input type="number" name="defCavShockDef" value="0"></td>
+        <td>
+          <input type="number" name="defCavMoralOff" value="0"></td>
+        <td>
+          <input type="number" name="defCavMoralDef" value="0"></td>
+      </tr>
+      <tr>
+        <td><img src="http://www.eu4wiki.com/images/d/d8/Artillery.png" /></td>
+        <td>
+          <select id="listPipsAttArt" onchange="updatePipsAttArt()">
+            <option value="0,0,0,0,0,0">### ARTILLERY ###</option>
+            <option value='0,0,0,0,0,0'>--- WESTERN ---</option>
+            <option value='1,0,2,0,1,0'>Large Cast Bronze Mortar</option>
+            <option value='1,1,1,0,1,0'>Houfnice</option>
+            <option value='2,1,3,1,2,2'>Culeverin</option>
+            <option value='1,2,2,3,1,2'>Pedrero</option>
+            <option value='2,2,2,1,2,1'>Small Cast Iron Cannon</option>
+            <option value='2,1,3,1,3,1'>Large Cast Iron Cannon</option>
+            <option value='2,2,3,3,3,3'>Chambered Demi Cannon</option>
+            <option value='4,3,3,2,2,2'>Leather Cannon</option>
+            <option value='4,4,3,3,2,2'>Swivel Cannon</option>
+            <option value='5,5,4,4,3,3'>Coehorn Mortar</option>
+            <option value='6,6,6,6,5,5'>Royal Mortar</option>
+            <option value='9,6,8,5,7,5'>Flying Battery</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" name="attArtReg" value="0" onchange="sumAttReg()"></td>
+        <td>
+          <input type="number" name="attArtFireOff" value="0"></td>
+        <td>
+          <input type="number" name="attArtFireDef" value="0"></td>
+        <td>
+          <input type="number" name="attArtShockOff" value="0"></td>
+        <td>
+          <input type="number" name="attArtShockDef" value="0"></td>
+        <td>
+          <input type="number" name="attArtMoralOff" value="0"></td>
+        <td>
+          <input type="number" name="attArtMoralDef" value="0"></td>
+        <td></td>
+        <td>
+          <select id="listPipsDefArt" onchange="updatePipsDefArt()">
+            <option value="0,0,0,0,0,0">### ARTILLERY ###</option>
+            <option value='0,0,0,0,0,0'>--- WESTERN ---</option>
+            <option value='1,0,2,0,1,0'>Large Cast Bronze Mortar</option>
+            <option value='1,1,1,0,1,0'>Houfnice</option>
+            <option value='2,1,3,1,2,2'>Culeverin</option>
+            <option value='1,2,2,3,1,2'>Pedrero</option>
+            <option value='2,2,2,1,2,1'>Small Cast Iron Cannon</option>
+            <option value='2,1,3,1,3,1'>Large Cast Iron Cannon</option>
+            <option value='2,2,3,3,3,3'>Chambered Demi Cannon</option>
+            <option value='4,3,3,2,2,2'>Leather Cannon</option>
+            <option value='4,4,3,3,2,2'>Swivel Cannon</option>
+            <option value='5,5,4,4,3,3'>Coehorn Mortar</option>
+            <option value='6,6,6,6,5,5'>Royal Mortar</option>
+            <option value='9,6,8,5,7,5'>Flying Battery</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" name="defArtReg" value="0" onchange="sumDefReg()"></td>
+        <td>
+          <input type="number" name="defArtFireOff" value="0"></td>
+        <td>
+          <input type="number" name="defArtFireDef" value="0"></td>
+        <td>
+          <input type="number" name="defArtShockOff" value="0"></td>
+        <td>
+          <input type="number" name="defArtShockDef" value="0"></td>
+        <td>
+          <input type="number" name="defArtMoralOff" value="0"></td>
+        <td>
+          <input type="number" name="defArtMoralDef" value="0"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>TOTAL</td>
+        <td id="attTotal">0</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td id="defTotal">0</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </form>
+
+  <table>
+    <tr>
+      <td>
+        <form name="modifiers">
+          <h3>Unit Modifiers</h3>
+          <table>
+            <tr>
+              <td></td>
+              <td colspan="2" class="center">Attacker</td>
+              <td colspan="2" class="center">Defender</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Fire
+                <img src="http://www.eu4wiki.com/images/thumb/2/2c/Icon_fire.png/28px-Icon_fire.png" /></td>
+              <td>Shock
+                <img src="http://www.eu4wiki.com/images/thumb/3/36/Icon_shock.png/28px-Icon_shock.png" /></td>
+              <td>Fire
+                <img src="http://www.eu4wiki.com/images/thumb/2/2c/Icon_fire.png/28px-Icon_fire.png" /></td>
+              <td>Shock
+                <img src="http://www.eu4wiki.com/images/thumb/3/36/Icon_shock.png/28px-Icon_shock.png" /></td>
+            </tr>
+            <tr>
+              <td>Infantry
+                <img src="http://www.eu4wiki.com/images/9/9f/Infantry.png" /></td>
+              <td>
+                <input type="number" name="attInfFire" value="0.25"></td>
+              <td>
+                <input type="number" name="attInfShock" value="0.50"></td>
+              <td>
+                <input type="number" name="defInfFire" value="0.25"></td>
+              <td>
+                <input type="number" name="defInfShock" value="0.50"></td>
+            </tr>
+            <tr>
+              <td>Cavalry
+                <img src="http://www.eu4wiki.com/images/1/15/Cavalry.png" /></td>
+              <td>
+                <input type="number" name="attCavFire" value="0.00"></td>
+              <td>
+                <input type="number" name="attCavShock" value="1.00"></td>
+              <td>
+                <input type="number" name="defCavFire" value="0.00"></td>
+              <td>
+                <input type="number" name="defCavShock" value="1.00"></td>
+            </tr>
+            <tr>
+              <td>Artillery
+                <img src="http://www.eu4wiki.com/images/d/d8/Artillery.png" /></td>
+              <td>
+                <input type="number" name="attArtFire" value="0"></td>
+              <td>
+                <input type="number" name="attArtShock" value="0"></td>
+              <td>
+                <input type="number" name="defArtFire" value="0"></td>
+              <td>
+                <input type="number" name="defArtShock" value="0"></td>
+            </tr>
+          </table>
+        </form>
+      </td>
+      <td rowspan="2" class="layout">
+        <form name="misc">
+          <h3>Miscellaneous</h3>
+          <table>
+            <tr>
+              <td></td>
+              <td colspan="2" class="center">Attacker</td>
+              <td colspan="2" class="center">Defender</td>
+            </tr>
+            <tr>
+              <td>Infantry Combat Ability
+                <img src="http://www.eu4wiki.com/images/thumb/2/2b/Infantry_power.png/28px-Infantry_power.png" /></td>
+              <td>
+                <input type="number" name="attInfAbi" value="0"></td>
+              <td></td>
+              <td>
+                <input type="number" name="defInfAbi" value="0"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Cavalry Combat Ability
+                <img src="http://www.eu4wiki.com/images/thumb/3/3f/Cavalry_power.png/28px-Cavalry_power.png" /></td>
+              <td>
+                <input type="number" name="attCavAbi" value="0"></td>
+              <td></td>
+              <td>
+                <input type="number" name="defCavAbi" value="0"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Artillery Combat Ability
+                <img src="http://www.eu4wiki.com/images/d/d8/Artillery.png" /></td>
+              <td>
+                <input type="number" name="attArtAbi" value="0"></td>
+              <td></td>
+              <td>
+                <input type="number" name="defArtAbi" value="0"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Terrain Modifier</td>
+              <td>
+                <input type="number" name="attTerMod" value="0"></td>
+              <td></td>
+              <td>
+                <input type="number" name="defTerMod" value="0"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Morale</td>
+              <td>
+                <input type="number" name="attMor" value="2.50"></td>
+              <td></td>
+              <td>
+                <input type="number" name="defMor" value="2.50"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Discipline
+                <img src="http://www.eu4wiki.com/images/5/59/Discipline.png" /></td>
+              <td>
+                <input type="number" name="attDiscipline" value="100"></td>
+              <td>%</td>
+              <td>
+                <input type="number" name="defDiscipline" value="100"></td>
+              <td>%</td>
+            </tr>
+            <tr>
+              <td>Military Tactics
+                <img src="http://www.eu4wiki.com/images/4/4f/Military_tactics.png" /></td>
+              <td>
+                <input type="number" name="attTactics" value="0.50"></td>
+              <td></td>
+              <td>
+                <input type="number" name="defTactics" value="0.50"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Combat width
+                <img src="http://www.eu4wiki.com/images/c/c1/Combat_width.png" /></td>
+              <td>
+                <input type="number" name="attWidth" value="20"></td>
+              <td></td>
+              <td>
+                <input type="number" name="defWidth" value="20"></td>
+              <td></td>
+            </tr>
+          </table>
+        </form>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <form name="leader">
+          <h3>Leader</h3>
+          <table>
+            <tr>
+              <td></td>
+              <td colspan="2" class="center">Attacker</td>
+              <td></td>
+              <td colspan="2" class="center">Defender</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td class="center">Fire
+                <img src="http://www.eu4wiki.com/images/thumb/2/2c/Icon_fire.png/28px-Icon_fire.png" /></td>
+              <td class="center">Shock
+                <img src="http://www.eu4wiki.com/images/thumb/3/36/Icon_shock.png/28px-Icon_shock.png" /></td>
+              <td></td>
+              <td class="center">Fire
+                <img src="http://www.eu4wiki.com/images/thumb/2/2c/Icon_fire.png/28px-Icon_fire.png" /></td>
+              <td class="center">Shock
+                <img src="http://www.eu4wiki.com/images/thumb/3/36/Icon_shock.png/28px-Icon_shock.png" /></td>
+            </tr>
+            <tr>
+              <td>Leader</td>
+              <td>
+                <input type="number" name="attFire" value="0"></td>
+              <td>
+                <input type="number" name="attShock" value="0"></td>
+              <td></td>
+              <td>
+                <input type="number" name="defFire" value="0"></td>
+              <td>
+                <input type="number" name="defShock" value="0"></td>
+            </tr>
+          </table>
+        </form>
+      </td>
+    </tr>
+  </table>
+  <br />
+
+  <div>
+    <input type="button" value="(N/A) Reset form" onclick="reset()" class="inputButton">
+    <input type="button" value="Restart battle" onclick="check()" class="inputButton">
+    <input type="button" value="Run next day" onclick="nextDay()" class="inputButton">
+  </div>
+
+  Battle duration : <b><span id="days"></span>day(s)</b><br />
+  Phase : <b><span id="phase"></span></b>
+  <br />
+
+  <table>
+    <tr>
+      <td></td>
+      <td class="battle">Die</td>
+      <td class="battle">Infantry
+        <img src="http://www.eu4wiki.com/images/9/9f/Infantry.png" /></td>
+      <td class="battle">Cavalry
+        <img src="http://www.eu4wiki.com/images/1/15/Cavalry.png" /></td>
+      <td class="battle">Artillery
+        <img src="http://www.eu4wiki.com/images/d/d8/Artillery.png" /></td>
+      <td class="battle">Morale</td>
+    </tr>
+    <tr>
+      <td class="battle">Attacker</td>
+      <td class="battle" id="attDie"></td>
+      <td class="battle" id="attCurInf"></td>
+      <td class="battle" id="attCurCav"></td>
+      <td class="battle" id="attCurArt"></td>
+      <td class="battle" id="attCurMoral"></td>
+    </tr>
+    <tr>
+      <td class="battle">Defender</td>
+      <td class="battle" id="defDie"></td>
+      <td class="battle" id="defCurInf"></td>
+      <td class="battle" id="defCurCav"></td>
+      <td class="battle" id="defCurArt"></td>
+      <td class="battle" id="defCurMoral"></td>
+    </tr>
+  </table>
+  <br />
+  <div>
+    <i><b>Notes for this release:</b><br />
+      * Only the <a href="http://www.eu4wiki.com/Land_warfare" target="_blank">land battle mechanic</a> is implemented. No siege or naval battle.<br />
+      * Unit deployment is not implemented. Units are deployed in a linear single one row.<br />
+      * Unit selection is not implemented. A unit only targets the face-to-face opponent one.<br />
+      * Attacker and Defender's armies must be exactly of the same size.<br />
+      * Any bug or improvement suggestion can be sent by email to <b>yahiko (dot) ninja (at) gmail (dot) com.</b><br />
+    </i>
+  </div>
+  <br />
+  <div>
+    <b>Credits:</b><br />
+    Designer & Programmer: yahiko<br />
+    Testers: bisthebis<br />
+  </div>
+  <br />
+</body>
+
+</html>
