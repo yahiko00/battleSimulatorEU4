@@ -37,6 +37,90 @@ function sumDefReg() {
     document.getElementById("defTotal").innerHTML = sum.toString();
 }
 
+function updatePipsAttInf() {
+    var listSelect = document.getElementById("listPipsAttInf");
+    var index = listSelect.selectedIndex;
+    var value = listSelect.options[index].value;
+    var valArray = value.split(",");
+
+    (document.getElementsByName("attInfMoralOff")[0]).value = valArray[0];
+    (document.getElementsByName("attInfMoralDef")[0]).value = valArray[1];
+    (document.getElementsByName("attInfFireOff")[0]).value = valArray[2];
+    (document.getElementsByName("attInfFireDef")[0]).value = valArray[3];
+    (document.getElementsByName("attInfShockOff")[0]).value = valArray[4];
+    (document.getElementsByName("attInfShockDef")[0]).value = valArray[5];
+}
+
+function updatePipsDefInf() {
+    var listSelect = document.getElementById("listPipsDefInf");
+    var index = listSelect.selectedIndex;
+    var value = listSelect.options[index].value;
+    var valArray = value.split(",");
+
+    (document.getElementsByName("defInfMoralOff")[0]).value = valArray[0];
+    (document.getElementsByName("defInfMoralDef")[0]).value = valArray[1];
+    (document.getElementsByName("defInfFireOff")[0]).value = valArray[2];
+    (document.getElementsByName("defInfFireDef")[0]).value = valArray[3];
+    (document.getElementsByName("defInfShockOff")[0]).value = valArray[4];
+    (document.getElementsByName("defInfShockDef")[0]).value = valArray[5];
+}
+
+function updatePipsAttCav() {
+    var listSelect = document.getElementById("listPipsAttCav");
+    var index = listSelect.selectedIndex;
+    var value = listSelect.options[index].value;
+    var valArray = value.split(",");
+
+    (document.getElementsByName("attCavMoralOff")[0]).value = valArray[0];
+    (document.getElementsByName("attCavMoralDef")[0]).value = valArray[1];
+    (document.getElementsByName("attCavFireOff")[0]).value = valArray[2];
+    (document.getElementsByName("attCavFireDef")[0]).value = valArray[3];
+    (document.getElementsByName("attCavShockOff")[0]).value = valArray[4];
+    (document.getElementsByName("attCavShockDef")[0]).value = valArray[5];
+}
+
+function updatePipsDefCav() {
+    var listSelect = document.getElementById("listPipsDefCav");
+    var index = listSelect.selectedIndex;
+    var value = listSelect.options[index].value;
+    var valArray = value.split(",");
+
+    (document.getElementsByName("defCavMoralOff")[0]).value = valArray[0];
+    (document.getElementsByName("defCavMoralDef")[0]).value = valArray[1];
+    (document.getElementsByName("defCavFireOff")[0]).value = valArray[2];
+    (document.getElementsByName("defCavFireDef")[0]).value = valArray[3];
+    (document.getElementsByName("defCavShockOff")[0]).value = valArray[4];
+    (document.getElementsByName("defCavShockDef")[0]).value = valArray[5];
+}
+
+function updatePipsAttArt() {
+    var listSelect = document.getElementById("listPipsAttArt");
+    var index = listSelect.selectedIndex;
+    var value = listSelect.options[index].value;
+    var valArray = value.split(",");
+
+    (document.getElementsByName("attArtMoralOff")[0]).value = valArray[0];
+    (document.getElementsByName("attArtMoralDef")[0]).value = valArray[1];
+    (document.getElementsByName("attArtFireOff")[0]).value = valArray[2];
+    (document.getElementsByName("attArtFireDef")[0]).value = valArray[3];
+    (document.getElementsByName("attArtShockOff")[0]).value = valArray[4];
+    (document.getElementsByName("attArtShockDef")[0]).value = valArray[5];
+}
+
+function updatePipsDefArt() {
+    var listSelect = document.getElementById("listPipsDefArt");
+    var index = listSelect.selectedIndex;
+    var value = listSelect.options[index].value;
+    var valArray = value.split(",");
+
+    (document.getElementsByName("defArtMoralOff")[0]).value = valArray[0];
+    (document.getElementsByName("defArtMoralDef")[0]).value = valArray[1];
+    (document.getElementsByName("defArtFireOff")[0]).value = valArray[2];
+    (document.getElementsByName("defArtFireDef")[0]).value = valArray[3];
+    (document.getElementsByName("defArtShockOff")[0]).value = valArray[4];
+    (document.getElementsByName("defArtShockDef")[0]).value = valArray[5];
+}
+
 function reset() {
 }
 
