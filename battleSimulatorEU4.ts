@@ -611,7 +611,7 @@ class Battle {
     this.defenderCur = defender;
 
     this.days = 0;
-    this.phase = "fire";
+    this.phase = "shock";
     this.dieRoll();
     this.attackerCur.setTargets(this.defenderCur);
     this.defenderCur.setTargets(this.attackerCur);
@@ -620,19 +620,16 @@ class Battle {
   nextDay() {
     this.days += 1;
 
-    if (this.days % 3 == 0) {
+    if ((this.days - 1) % 3 == 0) {
       if (this.phase == "fire") {
         this.phase = "shock";
-        this.attackerCur.setTargets(this.defenderCur);
-        this.defenderCur.setTargets(this.attackerCur);
-        this.dieRoll();
       }
       else {
         this.phase = "fire";
-        this.attackerCur.setTargets(this.defenderCur);
-        this.defenderCur.setTargets(this.attackerCur);
-        this.dieRoll();
       }
+      this.attackerCur.setTargets(this.defenderCur);
+      this.defenderCur.setTargets(this.attackerCur);
+      this.dieRoll();
     }
 
     // Calcul des dommages =============================================================
