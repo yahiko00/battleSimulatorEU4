@@ -125,7 +125,25 @@ function updatePipsDefArt() {
 function reset() {
 } // reset
 
-function check() {
+function parseDiceSequence(diceSequence: string) {
+  var diceArrayText = diceSequence.split(",");
+  var diceArray: number[] = [];
+
+  for (var i = 0; i < diceArrayText.length; i++) {
+    var item = diceArrayText[i];
+
+    if (item == "?") {
+      diceArray.push(-1);
+    }
+    else {
+      diceArray.push(parseInt(item))
+    }
+  } // for i
+
+  return diceArray;
+} // parseDiceSequence
+
+function restart() {
   var leadAttFire = parseInt(document.forms["leader"].attFire.value);
   var leadAttShock = parseInt(document.forms["leader"].attShock.value);
 
@@ -138,7 +156,10 @@ function check() {
   var attDiscipline = parseInt(document.forms["misc"].attDiscipline.value);
   var attTactics = parseFloat(document.forms["misc"].attTactics.value);
 
-  var armyAtt: Army = new Army(leadAttFire, leadAttShock, 0, attTerMod, attWidth, attMoral, attInfAbi, attCavAbi, attArtAbi, attDiscipline, attTactics);
+  var attDice = document.forms["options"].attDice.value;
+  var attDiceSequence = parseDiceSequence(attDice);
+
+  var armyAtt: Army = new Army(leadAttFire, leadAttShock, 0, attTerMod, attWidth, attMoral, attInfAbi, attCavAbi, attArtAbi, attDiscipline, attTactics, attDiceSequence);
 
   var attInfReg = parseInt(document.forms["pips"].attInfReg.value);
   var attInfFireOff = parseInt(document.forms["pips"].attInfFireOff.value);
@@ -196,7 +217,10 @@ function check() {
   var defDiscipline = parseInt(document.forms["misc"].defDiscipline.value);
   var defTactics = parseFloat(document.forms["misc"].defTactics.value);
 
-  var armyDef: Army = new Army(leadDefFire, leadDefShock, 0, defTerMod, defWidth, defMoral, defInfAbi, defCavAbi, defArtAbi, defDiscipline, defTactics);
+  var defDice = document.forms["options"].defDice.value;
+  var defDiceSequence = parseDiceSequence(defDice);
+
+  var armyDef: Army = new Army(leadDefFire, leadDefShock, 0, defTerMod, defWidth, defMoral, defInfAbi, defCavAbi, defArtAbi, defDiscipline, defTactics, defDiceSequence);
 
   var defInfReg = parseInt(document.forms["pips"].defInfReg.value);
   var defInfFireOff = parseInt(document.forms["pips"].defInfFireOff.value);
@@ -246,11 +270,16 @@ function check() {
   battle = new Battle(armyAtt, armyDef);
 
   show();
-} // check
+
+  if (battle.attackerCur.getSize() != battle.defenderCur.getSize()) {
+    alert("ERROR: attacker's army (" + battle.attackerCur.getSize() + ") and defender's army (" + battle.defenderCur.getSize() + ") have different size.");
+    throw "armies have different size";
+  }
+} // restart
 
 function nextDay() {
   if (!battle) {
-    check();
+    restart();
   }
   battle.nextDay();
 
@@ -277,11 +306,17 @@ function show() {
   document.getElementById("defCurCav").innerHTML = battle.defenderCur.getSize("cav").toString();
   document.getElementById("defCurArt").innerHTML = battle.defenderCur.getSize("art").toString();
   document.getElementById("defCurMoral").innerHTML = battle.defenderCur.getMoral().toFixed(2);
+
+  document.getElementById("attBackRow").innerHTML = battle.attackerCur.getBackRow();
+  document.getElementById("attFrontRow").innerHTML = battle.attackerCur.getFrontRow();
+
+  document.getElementById("defBackRow").innerHTML = battle.defenderCur.getBackRow();
+  document.getElementById("defFrontRow").innerHTML = battle.defenderCur.getFrontRow();
 }
 
-// *********************
-// Méchaniques de combat
-// *********************
+// ********************
+// Mécaniques de combat
+// ********************
 var globalID = 0;
 var battle: Battle = null;
 
@@ -369,9 +404,11 @@ class Army {
   artAbi: number;
   discipline: number;
   tactics: number;
+  diceSequence: number[] = [];
+  diceSequenceIndex: number = 0;
   die: number;
 
-  constructor(leadFire: number, leadShock: number, leadManeuver: number, terrainMod: number, combatWidth: number, moralMax: number, infAbi: number, cavAbi: number, artAbi: number, discipline: number, tactics: number) {
+  constructor(leadFire: number, leadShock: number, leadManeuver: number, terrainMod: number, combatWidth: number, moralMax: number, infAbi: number, cavAbi: number, artAbi: number, discipline: number, tactics: number, diceSequence: number[]) {
     this.leader = new Leader(leadFire, leadShock, leadManeuver);
     this.terrainMod = terrainMod;
     this.combatWidth = combatWidth;
@@ -381,19 +418,24 @@ class Army {
     this.artAbi = artAbi;
     this.discipline = discipline;
     this.tactics = tactics;
+    this.diceSequence = diceSequence;
   } // constructor
 
-  getSize(type: string): number {
+  getSize(type?: string): number {
     var size = 0;
 
-    for (var i = 0; i < this.units.length; i++) {
-      var unit = this.units[i];
-      if (unit.type == type) {
-        size += unit.men;
-      }
-    } // for i
-
-    return size;
+    if (!type) {
+      return this.units.length * 1000;
+    }
+    else {
+      for (var i = 0; i < this.units.length; i++) {
+        var unit = this.units[i];
+        if (unit.type == type) {
+          size += unit.men;
+        }
+      } // for i
+      return size;
+    }
   } // getSize
 
   getMoral(): number {
@@ -432,6 +474,7 @@ class Army {
       case "art":
         ability = this.artAbi;
         break;
+      default: break;
     } // switch type
 
     var unit = new Unit(type, men, this.moralMax, maneuver, fireOff, fireDef, shockOff, shockDef, moralOff, moralDef, fireMod, shockMod, ability, this.discipline, this.tactics, this.units.length, 0);
@@ -446,6 +489,46 @@ class Army {
       unit.setTarget(oppArmy);
     } // for i
   } // setTargets
+
+  dieRoll() {
+    var min = 0;
+    var max = 9;
+    var curDie = this.diceSequence[this.diceSequenceIndex];
+
+    if (curDie < 0) {
+      this.die = Math.floor(Math.random() * (max - min + 1) + min);
+    }
+    else {
+      this.die = curDie;
+    }
+
+    this.diceSequenceIndex++;
+    if (this.diceSequenceIndex >= this.diceSequence.length) {
+      this.diceSequenceIndex = 0;
+    }
+
+    return this.die;
+  } // dieRoll
+
+  getBackRow(): string {
+    return "";
+  } // getBackRow
+
+  getFrontRow(): string {
+    var result = "";
+
+    for (var i = 0; i < this.units.length; i++) {
+      var unit = this.units[i];
+
+      switch (unit.type) {
+        case "inf": result += "I"; break;
+        case "cav": result += "C"; break;
+        case "art": result += "A"; break;
+        default: break;
+      } // switch unit.type
+    } // for i
+    return result;
+  } // getFrontRow
 } // Army
 
 class Battle {
@@ -556,8 +639,8 @@ class Battle {
     var min = 0;
     var max = 9;
 
-    this.attackerCur.die = Math.floor(Math.random() * (max - min + 1) + min);
-    this.defenderCur.die = Math.floor(Math.random() * (max - min + 1) + min);
+    this.attackerCur.dieRoll();
+    this.defenderCur.dieRoll();
   } // dieRoll
 
   dieResult(die: number, attLead: number, defLead: number, attPips: number, defPips: number, terMod: number): number {
