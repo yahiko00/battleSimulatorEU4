@@ -121,10 +121,24 @@ function updatePipsDefArt() {
     (document.getElementsByName("defArtShockDef")[0]).value = valArray[5];
 }
 
-function reset() {
+function parseDiceSequence(diceSequence) {
+    var diceArrayText = diceSequence.split(",");
+    var diceArray = [];
+
+    for (var i = 0; i < diceArrayText.length; i++) {
+        var item = diceArrayText[i];
+
+        if (item == "?") {
+            diceArray.push(-1);
+        } else {
+            diceArray.push(parseInt(item));
+        }
+    }
+
+    return diceArray;
 }
 
-function check() {
+function restart() {
     var leadAttFire = parseInt(document.forms["leader"].attFire.value);
     var leadAttShock = parseInt(document.forms["leader"].attShock.value);
 
@@ -137,7 +151,10 @@ function check() {
     var attDiscipline = parseInt(document.forms["misc"].attDiscipline.value);
     var attTactics = parseFloat(document.forms["misc"].attTactics.value);
 
-    var armyAtt = new Army(leadAttFire, leadAttShock, 0, attTerMod, attWidth, attMoral, attInfAbi, attCavAbi, attArtAbi, attDiscipline, attTactics);
+    var attDice = document.forms["options"].attDice.value;
+    var attDiceSequence = parseDiceSequence(attDice);
+
+    var armyAtt = new Army(leadAttFire, leadAttShock, 0, attTerMod, attWidth, attMoral, attInfAbi, attCavAbi, attArtAbi, attDiscipline, attTactics, attDiceSequence);
 
     var attInfReg = parseInt(document.forms["pips"].attInfReg.value);
     var attInfFireOff = parseInt(document.forms["pips"].attInfFireOff.value);
@@ -195,7 +212,10 @@ function check() {
     var defDiscipline = parseInt(document.forms["misc"].defDiscipline.value);
     var defTactics = parseFloat(document.forms["misc"].defTactics.value);
 
-    var armyDef = new Army(leadDefFire, leadDefShock, 0, defTerMod, defWidth, defMoral, defInfAbi, defCavAbi, defArtAbi, defDiscipline, defTactics);
+    var defDice = document.forms["options"].defDice.value;
+    var defDiceSequence = parseDiceSequence(defDice);
+
+    var armyDef = new Army(leadDefFire, leadDefShock, 0, defTerMod, defWidth, defMoral, defInfAbi, defCavAbi, defArtAbi, defDiscipline, defTactics, defDiceSequence);
 
     var defInfReg = parseInt(document.forms["pips"].defInfReg.value);
     var defInfFireOff = parseInt(document.forms["pips"].defInfFireOff.value);
@@ -245,11 +265,16 @@ function check() {
     battle = new Battle(armyAtt, armyDef);
 
     show();
+
+    if (battle.attackerCur.getSize() != battle.defenderCur.getSize()) {
+        alert("ERROR: attacker's army (" + battle.attackerCur.getSize() + ") and defender's army (" + battle.defenderCur.getSize() + ") have different size.");
+        throw "armies have different size";
+    }
 }
 
 function nextDay() {
     if (!battle) {
-        check();
+        restart();
     }
     battle.nextDay();
 
@@ -272,15 +297,41 @@ function show() {
     document.getElementById("attCurArt").innerHTML = battle.attackerCur.getSize("art").toString();
     document.getElementById("attCurMoral").innerHTML = battle.attackerCur.getMoral().toFixed(2);
 
+    document.getElementById("attDayInf").innerHTML = battle.attackerCur.getMenDayLoss("inf").toString();
+    document.getElementById("attDayCav").innerHTML = battle.attackerCur.getMenDayLoss("cav").toString();
+    document.getElementById("attDayArt").innerHTML = battle.attackerCur.getMenDayLoss("art").toString();
+    document.getElementById("attDayMoral").innerHTML = battle.attackerCur.getMoralDayLoss().toFixed(2);
+
+    document.getElementById("attCumInf").innerHTML = battle.attackerCur.getMenCumLoss("inf").toString();
+    document.getElementById("attCumCav").innerHTML = battle.attackerCur.getMenCumLoss("cav").toString();
+    document.getElementById("attCumArt").innerHTML = battle.attackerCur.getMenCumLoss("art").toString();
+    document.getElementById("attCumMoral").innerHTML = battle.attackerCur.getMoralCumLoss().toFixed(2);
+
     document.getElementById("defCurInf").innerHTML = battle.defenderCur.getSize("inf").toString();
     document.getElementById("defCurCav").innerHTML = battle.defenderCur.getSize("cav").toString();
     document.getElementById("defCurArt").innerHTML = battle.defenderCur.getSize("art").toString();
     document.getElementById("defCurMoral").innerHTML = battle.defenderCur.getMoral().toFixed(2);
+
+    document.getElementById("defDayInf").innerHTML = battle.defenderCur.getMenDayLoss("inf").toString();
+    document.getElementById("defDayCav").innerHTML = battle.defenderCur.getMenDayLoss("cav").toString();
+    document.getElementById("defDayArt").innerHTML = battle.defenderCur.getMenDayLoss("art").toString();
+    document.getElementById("defDayMoral").innerHTML = battle.defenderCur.getMoralDayLoss().toFixed(2);
+
+    document.getElementById("defCumInf").innerHTML = battle.defenderCur.getMenCumLoss("inf").toString();
+    document.getElementById("defCumCav").innerHTML = battle.defenderCur.getMenCumLoss("cav").toString();
+    document.getElementById("defCumArt").innerHTML = battle.defenderCur.getMenCumLoss("art").toString();
+    document.getElementById("defCumMoral").innerHTML = battle.defenderCur.getMoralCumLoss().toFixed(2);
+
+    document.getElementById("attBackRow").innerHTML = battle.attackerCur.getBackRow();
+    document.getElementById("attFrontRow").innerHTML = battle.attackerCur.getFrontRow();
+
+    document.getElementById("defBackRow").innerHTML = battle.defenderCur.getBackRow();
+    document.getElementById("defFrontRow").innerHTML = battle.defenderCur.getFrontRow();
 }
 
-// *********************
-// Méchaniques de combat
-// *********************
+// ********************
+// Mécaniques de combat
+// ********************
 var globalID = 0;
 var battle = null;
 
@@ -307,6 +358,8 @@ var Unit = (function () {
 
         this.posX = posX;
         this.posRow = posRow;
+        this.casualties = 0;
+        this.moralDamage = 0.0;
     }
     Unit.prototype.setTarget = function (oppArmy) {
         this.target = oppArmy.getUnit(this.posX, this.posRow);
@@ -316,8 +369,8 @@ var Unit = (function () {
         this.men -= this.casualties;
         this.men = Math.max(this.men, 0);
 
+        this.moralDamage += 0.01;
         this.moral -= this.moralDamage;
-        this.moral -= 0.01;
         this.moral = Math.max(this.moral, 0);
     };
     return Unit;
@@ -333,9 +386,11 @@ var Leader = (function () {
 })();
 
 var Army = (function () {
-    function Army(leadFire, leadShock, leadManeuver, terrainMod, combatWidth, moralMax, infAbi, cavAbi, artAbi, discipline, tactics) {
+    function Army(leadFire, leadShock, leadManeuver, terrainMod, combatWidth, moralMax, infAbi, cavAbi, artAbi, discipline, tactics, diceSequence) {
         this.units = [];
         this.leader = null;
+        this.diceSequence = [];
+        this.diceSequenceIndex = 0;
         this.leader = new Leader(leadFire, leadShock, leadManeuver);
         this.terrainMod = terrainMod;
         this.combatWidth = combatWidth;
@@ -345,13 +400,15 @@ var Army = (function () {
         this.artAbi = artAbi;
         this.discipline = discipline;
         this.tactics = tactics;
+        this.diceSequence = diceSequence;
     }
     Army.prototype.getSize = function (type) {
         var size = 0;
 
         for (var i = 0; i < this.units.length; i++) {
             var unit = this.units[i];
-            if (unit.type == type) {
+
+            if (!type || unit.type == type) {
                 size += unit.men;
             }
         }
@@ -359,16 +416,64 @@ var Army = (function () {
         return size;
     };
 
-    Army.prototype.getMoral = function () {
+    Army.prototype.getMoral = function (type) {
         var moral = 0.0;
 
         for (var i = 0; i < this.units.length; i++) {
             var unit = this.units[i];
 
-            moral += unit.moral;
+            if (!type || unit.type == type) {
+                moral += unit.moral;
+            }
         }
 
         return moral / this.units.length;
+    };
+
+    Army.prototype.getMenDayLoss = function (type) {
+        var result = 0;
+
+        for (var i = 0; i < this.units.length; i++) {
+            var unit = this.units[i];
+
+            if (!type || unit.type == type) {
+                result += unit.casualties;
+            }
+        }
+
+        return result;
+    };
+
+    Army.prototype.getMoralDayLoss = function (type) {
+        var sum = 0;
+
+        for (var i = 0; i < this.units.length; i++) {
+            var unit = this.units[i];
+
+            if (!type || unit.type == type) {
+                sum += unit.moralDamage;
+            }
+        }
+
+        return sum / this.units.length;
+    };
+
+    Army.prototype.getMenCumLoss = function (type) {
+        var sum = 0;
+
+        for (var i = 0; i < this.units.length; i++) {
+            var unit = this.units[i];
+
+            if (!type || unit.type == type) {
+                sum += 1000;
+            }
+        }
+
+        return sum - this.getSize(type);
+    };
+
+    Army.prototype.getMoralCumLoss = function (type) {
+        return this.moralMax - this.getMoral(type);
     };
 
     Army.prototype.getUnit = function (x, row) {
@@ -395,6 +500,8 @@ var Army = (function () {
             case "art":
                 ability = this.artAbi;
                 break;
+            default:
+                break;
         }
 
         var unit = new Unit(type, men, this.moralMax, maneuver, fireOff, fireDef, shockOff, shockDef, moralOff, moralDef, fireMod, shockMod, ability, this.discipline, this.tactics, this.units.length, 0);
@@ -408,6 +515,52 @@ var Army = (function () {
 
             unit.setTarget(oppArmy);
         }
+    };
+
+    Army.prototype.dieRoll = function () {
+        var min = 0;
+        var max = 9;
+        var curDie = this.diceSequence[this.diceSequenceIndex];
+
+        if (curDie < 0) {
+            this.die = Math.floor(Math.random() * (max - min + 1) + min);
+        } else {
+            this.die = curDie;
+        }
+
+        this.diceSequenceIndex++;
+        if (this.diceSequenceIndex >= this.diceSequence.length) {
+            this.diceSequenceIndex = 0;
+        }
+
+        return this.die;
+    };
+
+    Army.prototype.getBackRow = function () {
+        return "";
+    };
+
+    Army.prototype.getFrontRow = function () {
+        var result = "";
+
+        for (var i = 0; i < this.units.length; i++) {
+            var unit = this.units[i];
+
+            switch (unit.type) {
+                case "inf":
+                    result += "I";
+                    break;
+                case "cav":
+                    result += "C";
+                    break;
+                case "art":
+                    result += "A";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return result;
     };
     return Army;
 })();
@@ -424,7 +577,7 @@ var Battle = (function () {
         this.defenderCur = defender;
 
         this.days = 0;
-        this.phase = "fire";
+        this.phase = "shock";
         this.dieRoll();
         this.attackerCur.setTargets(this.defenderCur);
         this.defenderCur.setTargets(this.attackerCur);
@@ -432,18 +585,15 @@ var Battle = (function () {
     Battle.prototype.nextDay = function () {
         this.days += 1;
 
-        if (this.days % 3 == 0) {
+        if ((this.days - 1) % 3 == 0) {
             if (this.phase == "fire") {
                 this.phase = "shock";
-                this.attackerCur.setTargets(this.defenderCur);
-                this.defenderCur.setTargets(this.attackerCur);
-                this.dieRoll();
             } else {
                 this.phase = "fire";
-                this.attackerCur.setTargets(this.defenderCur);
-                this.defenderCur.setTargets(this.attackerCur);
-                this.dieRoll();
             }
+            this.attackerCur.setTargets(this.defenderCur);
+            this.defenderCur.setTargets(this.attackerCur);
+            this.dieRoll();
         }
 
         // Calcul des dommages =============================================================
@@ -506,12 +656,13 @@ var Battle = (function () {
         var min = 0;
         var max = 9;
 
-        this.attackerCur.die = Math.floor(Math.random() * (max - min + 1) + min);
-        this.defenderCur.die = Math.floor(Math.random() * (max - min + 1) + min);
+        this.attackerCur.dieRoll();
+        this.defenderCur.dieRoll();
     };
 
     Battle.prototype.dieResult = function (die, attLead, defLead, attPips, defPips, terMod) {
-        var result = die + (attLead - defLead) + (attPips - defPips) - terMod;
+        var difLead = Math.max(attLead - defLead, 0);
+        var result = die + difLead + (attPips - defPips) + terMod;
         return result;
     };
 
@@ -558,10 +709,11 @@ var Battle = (function () {
     };
 
     Battle.prototype.moralDamage = function (baseCasualties, men, moralMax, combatAbility, discipline, tactics) {
+        //alert(baseCasualties + ", " + men / 1000 + ", " + moralMax + ", " + combatAbility + ", " + discipline + ", " + tactics);
         return baseCasualties * 0.01 / 6 * men / 1000 * moralMax * (100 + combatAbility) / 100 * (discipline / 100) / tactics;
     };
 
-    Battle.prototype.computeDamage = function (unit, attDie, leadAttSkill, leadDefSkill, attMoralMax, terMod) {
+    Battle.prototype.computeDamage = function (unit, die, leadAttSkill, leadDefSkill, attMoralMax, terMod) {
         var attPipsM = unit.moralOff;
         var defPipsM = unit.target.moralDef;
 
@@ -575,20 +727,21 @@ var Battle = (function () {
             var attMod = unit.shockMod;
         }
 
-        var dieResultC = this.dieResult(attDie, leadAttSkill, leadDefSkill, attPips, defPips, terMod);
-        var dieResultM = this.dieResult(attDie, leadAttSkill, leadDefSkill, attPipsM, defPipsM, terMod);
+        var dieResultC = this.dieResult(die, leadAttSkill, leadDefSkill, attPips, defPips, terMod);
+        var dieResultM = this.dieResult(die, leadAttSkill, leadDefSkill, attPipsM, defPipsM, terMod);
         console.log("dieResult : " + unit.id + " : " + dieResultC + ", " + dieResultM);
 
         var baseCasualtiesC = this.baseCasualties(dieResultC);
         var baseCasualtiesM = this.baseCasualties(dieResultM);
         console.log("baseCasualties : " + unit.id + " : " + baseCasualtiesC + ", " + baseCasualtiesM);
 
-        unit.casualties = this.casualties(baseCasualtiesC, unit.men, attMod, unit.ability, unit.discipline, unit.target.tactics);
-        unit.casualties *= Math.round(1 + (this.days - 1) / 100);
+        unit.target.casualties = this.casualties(baseCasualtiesC, unit.men, attMod, unit.ability, unit.discipline, unit.target.tactics);
+        unit.target.casualties *= Math.round(1 + (this.days - 1) / 100);
 
-        unit.moralDamage = this.moralDamage(baseCasualtiesM, unit.men, attMoralMax, unit.ability, unit.discipline, unit.target.tactics);
-        unit.moralDamage *= 1.1;
-        console.log("damage : " + unit.id + " : " + unit.casualties + ", " + unit.moralDamage);
+        unit.target.moralDamage = this.moralDamage(baseCasualtiesM, unit.men, attMoralMax, unit.ability, unit.discipline, unit.target.tactics);
+        unit.target.moralDamage *= 1.1;
+
+        console.log("damage : " + unit.target.id + " : " + unit.target.casualties + ", " + unit.target.moralDamage);
     };
     return Battle;
 })();// Battle
