@@ -393,8 +393,8 @@ class Unit {
     this.men -= this.casualties;
     this.men = Math.max(this.men, 0);
 
+    this.moralDamage += 0.01; // patch 1.4
     this.moral -= this.moralDamage;
-    this.moral -= 0.01; // patch 1.4
     this.moral = Math.max(this.moral, 0);
   } // applyDamage
 } // Unit
@@ -708,7 +708,8 @@ class Battle {
   } // dieRoll
 
   dieResult(die: number, attLead: number, defLead: number, attPips: number, defPips: number, terMod: number): number {
-    var result = die + (attLead - defLead) + (attPips - defPips) - terMod;
+    var difLead = Math.max(attLead - defLead, 0);
+    var result = die + difLead + (attPips - defPips) + terMod;
     return result;
   } // dieResult
 
@@ -770,6 +771,7 @@ class Battle {
   }
 
   moralDamage(baseCasualties: number, men: number, moralMax: number, combatAbility: number, discipline: number, tactics: number): number {
+    //alert(baseCasualties + ", " + men / 1000 + ", " + moralMax + ", " + combatAbility + ", " + discipline + ", " + tactics);
     return baseCasualties * 0.01 / 6 * men / 1000 * moralMax * (100 + combatAbility) / 100 * (discipline / 100) / tactics;
   }
 
@@ -801,6 +803,7 @@ class Battle {
 
     unit.target.moralDamage = this.moralDamage(baseCasualtiesM, unit.men, attMoralMax, unit.ability, unit.discipline, unit.target.tactics);
     unit.target.moralDamage *= 1.1; // patch 1.4
+
     console.log("damage : " + unit.target.id + " : " + unit.target.casualties + ", " + unit.target.moralDamage);
   } // computeDamage
 } // Battle
