@@ -9,7 +9,7 @@
 </head>
 <body>
   <h1>Battle Simulator for Europa Universalis IV</h1>
-  <div align="center"><i>beta release 0.1.1</i></div>
+  <div align="center"><i>beta release 0.6</i></div>
   <br />
   <form name="pips">
     <h3>Pips</h3>
@@ -46,7 +46,7 @@
         <td><img src="http://www.eu4wiki.com/images/9/9f/Infantry.png" /></td>
         <td>
           <select id="listPipsAttInf" onchange="updatePipsAttInf()">
-            <option value="0,0,0,0,0,0">### INFANTRY ###</option>
+            <option value="0,0,0,0,0,0" selected>### INFANTRY ###</option>
             <option value="0,0,0,0,0,0">--- WESTERN ---</option>
             <option value="2,0,0,0,0,0">Halberd Infantry </option>
             <option value="1,1,0,0,0,0">Latin Medieval Infantry</option>
@@ -217,7 +217,7 @@
         <td></td>
         <td>
           <select id="listPipsDefInf" onchange="updatePipsDefInf()">
-            <option value="0,0,0,0,0,0">### INFANTRY ###</option>
+            <option value="0,0,0,0,0,0" selected>### INFANTRY ###</option>
             <option value="0,0,0,0,0,0">--- WESTERN ---</option>
             <option value="2,0,0,0,0,0">Halberd Infantry </option>
             <option value="1,1,0,0,0,0">Latin Medieval Infantry</option>
@@ -390,7 +390,7 @@
         <td><img src="http://www.eu4wiki.com/images/1/15/Cavalry.png" /></td>
         <td>
           <select id="listPipsAttCav" onchange="updatePipsAttCav()">
-            <option value="0,0,0,0,0,0">### CAVALRY ###</option>
+            <option value="0,0,0,0,0,0" selected>### CAVALRY ###</option>
             <option value='0,0,0,0,0,0'>--- WESTERN ---</option>
             <option value='2,0,0,0,2,0'>Chevauchée</option>
             <option value='1,1,0,0,1,0'>Western Medieval Knights</option>
@@ -494,7 +494,7 @@
         <td></td>
         <td>
           <select id="listPipsDefCav" onchange="updatePipsDefCav()">
-            <option value="0,0,0,0,0,0">### CAVALRY ###</option>
+            <option value="0,0,0,0,0,0" selected>### CAVALRY ###</option>
             <option value='0,0,0,0,0,0'>--- WESTERN ---</option>
             <option value='2,0,0,0,2,0'>Chevauchée</option>
             <option value='1,1,0,0,1,0'>Western Medieval Knights</option>
@@ -600,7 +600,7 @@
         <td><img src="http://www.eu4wiki.com/images/d/d8/Artillery.png" /></td>
         <td>
           <select id="listPipsAttArt" onchange="updatePipsAttArt()">
-            <option value="0,0,0,0,0,0">### ARTILLERY ###</option>
+            <option value="0,0,0,0,0,0" selected>### ARTILLERY ###</option>
             <option value='0,0,0,0,0,0'>--- WESTERN ---</option>
             <option value='1,0,2,0,1,0'>Large Cast Bronze Mortar</option>
             <option value='1,1,1,0,1,0'>Houfnice</option>
@@ -633,7 +633,7 @@
         <td></td>
         <td>
           <select id="listPipsDefArt" onchange="updatePipsDefArt()">
-            <option value="0,0,0,0,0,0">### ARTILLERY ###</option>
+            <option value="0,0,0,0,0,0" selected>### ARTILLERY ###</option>
             <option value='0,0,0,0,0,0'>--- WESTERN ---</option>
             <option value='1,0,2,0,1,0'>Large Cast Bronze Mortar</option>
             <option value='1,1,1,0,1,0'>Houfnice</option>
@@ -881,9 +881,28 @@
   </table>
   <br />
 
+  <form name="options">
+    <h3>Simulator Options</h3>
+  <table>
+    <tr>
+      <td></td>
+      <td class="center">Dice sequence (*)</td>
+    </tr>
+    <tr>
+      <td>Attacker</td>
+      <td class="left"><input type="text" name="attDice" value="?" class="lineText"></td>
+    </tr>
+    <tr>
+      <td>Defender</td>
+      <td class="left"><input type="text" name="defDice" value="?" class="lineText"></td>
+    </tr>
+  </table>
+    <i>(*) random value [0-9]: "?", value separator: ","</i><br />
+    </form>
+  <br />
+
   <div>
-    <input type="button" value="(N/A) Reset form" onclick="reset()" class="inputButton">
-    <input type="button" value="Restart battle" onclick="check()" class="inputButton">
+    <input type="button" value="Restart battle" onclick="restart()" class="inputButton">
     <input type="button" value="Run next day" onclick="nextDay()" class="inputButton">
   </div>
 
@@ -895,6 +914,7 @@
     <tr>
       <td></td>
       <td class="battle">Die</td>
+      <td></td>
       <td class="battle">Infantry
         <img src="http://www.eu4wiki.com/images/9/9f/Infantry.png" /></td>
       <td class="battle">Cavalry
@@ -904,27 +924,81 @@
       <td class="battle">Morale</td>
     </tr>
     <tr>
-      <td class="battle">Attacker</td>
-      <td class="battle" id="attDie"></td>
+      <td class="battle" rowspan="3">Attacker</td>
+      <td class="battle" rowspan="3" id="attDie"></td>
+      <td class="battle">Current</td>
       <td class="battle" id="attCurInf"></td>
       <td class="battle" id="attCurCav"></td>
       <td class="battle" id="attCurArt"></td>
       <td class="battle" id="attCurMoral"></td>
     </tr>
     <tr>
-      <td class="battle">Defender</td>
-      <td class="battle" id="defDie"></td>
+      <td class="battle">Day Losses</td>
+      <td class="battle" id="attDayInf"></td>
+      <td class="battle" id="attDayCav"></td>
+      <td class="battle" id="attDayArt"></td>
+      <td class="battle" id="attDayMoral"></td>
+    </tr>
+    <tr>
+      <td class="battle">Cum. Losses</td>
+      <td class="battle" id="attCumInf"></td>
+      <td class="battle" id="attCumCav"></td>
+      <td class="battle" id="attCumArt"></td>
+      <td class="battle" id="attCumMoral"></td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td colspan="6">
+        <table>
+          <tr>
+            <td>back row</td>
+            <td class="row" id="attBackRow"></td>
+          </tr>
+          <tr>
+            <td>front row</td>
+            <td class="row" id="attFrontRow"></td>
+          </tr>
+          <tr></tr>
+          <tr>
+            <td>front row</td>
+            <td class="row" id="defFrontRow"></td>
+          </tr>
+          <tr>
+            <td>back row</td>
+            <td class="row" id="defBackRow"></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td class="battle" rowspan="3">Defender</td>
+      <td class="battle" rowspan="3" id="defDie"></td>
+      <td class="battle">Current</td>
       <td class="battle" id="defCurInf"></td>
       <td class="battle" id="defCurCav"></td>
       <td class="battle" id="defCurArt"></td>
       <td class="battle" id="defCurMoral"></td>
+    </tr>
+    <tr>
+      <td class="battle">Day Losses</td>
+      <td class="battle" id="defDayInf"></td>
+      <td class="battle" id="defDayCav"></td>
+      <td class="battle" id="defDayArt"></td>
+      <td class="battle" id="defDayMoral"></td>
+    </tr>
+    <tr>
+      <td class="battle">Cum. Losses</td>
+      <td class="battle" id="defCumInf"></td>
+      <td class="battle" id="defCumCav"></td>
+      <td class="battle" id="defCumArt"></td>
+      <td class="battle" id="defCumMoral"></td>
     </tr>
   </table>
   <br />
   <div>
     <i><b>Notes for this release:</b><br />
       * Only the <a href="http://www.eu4wiki.com/Land_warfare" target="_blank">land battle mechanic</a> is implemented. No siege or naval battle.<br />
-      * Unit deployment is not implemented. Units are deployed in a linear single one row.<br />
+      * Unit deployment is not implemented. Units are deployed in a one linear single row.<br />
       * Unit selection is not implemented. A unit only targets the face-to-face opponent one.<br />
       * Attacker and Defender's armies must be exactly of the same size.<br />
       * Any bug or improvement suggestion can be sent by email to <b>yahiko (dot) ninja (at) gmail (dot) com.</b><br />
@@ -934,7 +1008,7 @@
   <div>
     <b>Credits:</b><br />
     Designer & Programmer: yahiko<br />
-    Testers: bisthebis<br />
+    Testers & Ideas Contributors: bisthebis, Leyzou, Schmoekoeksklok<br />
   </div>
   <br />
 </body>
