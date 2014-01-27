@@ -709,7 +709,7 @@ class Battle {
     return baseCasualties * 0.01 / 6 * men / 1000 * moralMax * (100 + combatAbility) / 100 * (discipline / 100) / tactics;
   }
 
-  computeDamage(unit: Unit, attDie: number, leadAttSkill: number, leadDefSkill: number, attMoralMax: number, terMod: number) {
+  computeDamage(unit: Unit, die: number, leadAttSkill: number, leadDefSkill: number, attMoralMax: number, terMod: number) {
     var attPipsM = unit.moralOff;
     var defPipsM = unit.target.moralDef;
 
@@ -724,19 +724,19 @@ class Battle {
       var attMod = unit.shockMod;
     }
 
-    var dieResultC = this.dieResult(attDie, leadAttSkill, leadDefSkill, attPips, defPips, terMod);
-    var dieResultM = this.dieResult(attDie, leadAttSkill, leadDefSkill, attPipsM, defPipsM, terMod);
+    var dieResultC = this.dieResult(die, leadAttSkill, leadDefSkill, attPips, defPips, terMod);
+    var dieResultM = this.dieResult(die, leadAttSkill, leadDefSkill, attPipsM, defPipsM, terMod);
     console.log("dieResult : " + unit.id + " : " + dieResultC + ", " + dieResultM);
 
     var baseCasualtiesC = this.baseCasualties(dieResultC);
     var baseCasualtiesM = this.baseCasualties(dieResultM);
     console.log("baseCasualties : " + unit.id + " : " + baseCasualtiesC + ", " + baseCasualtiesM);
 
-    unit.casualties = this.casualties(baseCasualtiesC, unit.men, attMod, unit.ability, unit.discipline, unit.target.tactics);
-    unit.casualties *= Math.round(1 + (this.days - 1) / 100);
+    unit.target.casualties = this.casualties(baseCasualtiesC, unit.men, attMod, unit.ability, unit.discipline, unit.target.tactics);
+    unit.target.casualties *= Math.round(1 + (this.days - 1) / 100);
 
-    unit.moralDamage = this.moralDamage(baseCasualtiesM, unit.men, attMoralMax, unit.ability, unit.discipline, unit.target.tactics);
-    unit.moralDamage *= 1.1; // patch 1.4
-    console.log("damage : " + unit.id + " : " + unit.casualties + ", " + unit.moralDamage);
+    unit.target.moralDamage = this.moralDamage(baseCasualtiesM, unit.men, attMoralMax, unit.ability, unit.discipline, unit.target.tactics);
+    unit.target.moralDamage *= 1.1; // patch 1.4
+    console.log("damage : " + unit.target.id + " : " + unit.target.casualties + ", " + unit.target.moralDamage);
   } // computeDamage
 } // Battle
