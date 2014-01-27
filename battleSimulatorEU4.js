@@ -369,8 +369,8 @@ var Unit = (function () {
         this.men -= this.casualties;
         this.men = Math.max(this.men, 0);
 
+        this.moralDamage += 0.01;
         this.moral -= this.moralDamage;
-        this.moral -= 0.01;
         this.moral = Math.max(this.moral, 0);
     };
     return Unit;
@@ -664,7 +664,8 @@ var Battle = (function () {
     };
 
     Battle.prototype.dieResult = function (die, attLead, defLead, attPips, defPips, terMod) {
-        var result = die + (attLead - defLead) + (attPips - defPips) - terMod;
+        var difLead = Math.max(attLead - defLead, 0);
+        var result = die + difLead + (attPips - defPips) + terMod;
         return result;
     };
 
@@ -711,6 +712,7 @@ var Battle = (function () {
     };
 
     Battle.prototype.moralDamage = function (baseCasualties, men, moralMax, combatAbility, discipline, tactics) {
+        //alert(baseCasualties + ", " + men / 1000 + ", " + moralMax + ", " + combatAbility + ", " + discipline + ", " + tactics);
         return baseCasualties * 0.01 / 6 * men / 1000 * moralMax * (100 + combatAbility) / 100 * (discipline / 100) / tactics;
     };
 
@@ -741,6 +743,7 @@ var Battle = (function () {
 
         unit.target.moralDamage = this.moralDamage(baseCasualtiesM, unit.men, attMoralMax, unit.ability, unit.discipline, unit.target.tactics);
         unit.target.moralDamage *= 1.1;
+
         console.log("damage : " + unit.target.id + " : " + unit.target.casualties + ", " + unit.target.moralDamage);
     };
     return Battle;
