@@ -121,9 +121,6 @@ function updatePipsDefArt() {
     (document.getElementsByName("defArtShockDef")[0]).value = valArray[5];
 }
 
-function reset() {
-}
-
 function parseDiceSequence(diceSequence) {
     var diceArrayText = diceSequence.split(",");
     var diceArray = [];
@@ -300,10 +297,30 @@ function show() {
     document.getElementById("attCurArt").innerHTML = battle.attackerCur.getSize("art").toString();
     document.getElementById("attCurMoral").innerHTML = battle.attackerCur.getMoral().toFixed(2);
 
+    document.getElementById("attDayInf").innerHTML = battle.attackerCur.getMenDayLoss("inf").toString();
+    document.getElementById("attDayCav").innerHTML = battle.attackerCur.getMenDayLoss("cav").toString();
+    document.getElementById("attDayArt").innerHTML = battle.attackerCur.getMenDayLoss("art").toString();
+    document.getElementById("attDayMoral").innerHTML = battle.attackerCur.getMoralDayLoss().toFixed(2);
+
+    document.getElementById("attCumInf").innerHTML = battle.attackerCur.getMenCumLoss("inf").toString();
+    document.getElementById("attCumCav").innerHTML = battle.attackerCur.getMenCumLoss("cav").toString();
+    document.getElementById("attCumArt").innerHTML = battle.attackerCur.getMenCumLoss("art").toString();
+    document.getElementById("attCumMoral").innerHTML = battle.attackerCur.getMoralCumLoss().toFixed(2);
+
     document.getElementById("defCurInf").innerHTML = battle.defenderCur.getSize("inf").toString();
     document.getElementById("defCurCav").innerHTML = battle.defenderCur.getSize("cav").toString();
     document.getElementById("defCurArt").innerHTML = battle.defenderCur.getSize("art").toString();
     document.getElementById("defCurMoral").innerHTML = battle.defenderCur.getMoral().toFixed(2);
+
+    document.getElementById("defDayInf").innerHTML = battle.defenderCur.getMenDayLoss("inf").toString();
+    document.getElementById("defDayCav").innerHTML = battle.defenderCur.getMenDayLoss("cav").toString();
+    document.getElementById("defDayArt").innerHTML = battle.defenderCur.getMenDayLoss("art").toString();
+    document.getElementById("defDayMoral").innerHTML = battle.defenderCur.getMoralDayLoss().toFixed(2);
+
+    document.getElementById("defCumInf").innerHTML = battle.defenderCur.getMenCumLoss("inf").toString();
+    document.getElementById("defCumCav").innerHTML = battle.defenderCur.getMenCumLoss("cav").toString();
+    document.getElementById("defCumArt").innerHTML = battle.defenderCur.getMenCumLoss("art").toString();
+    document.getElementById("defCumMoral").innerHTML = battle.defenderCur.getMoralCumLoss().toFixed(2);
 
     document.getElementById("attBackRow").innerHTML = battle.attackerCur.getBackRow();
     document.getElementById("attFrontRow").innerHTML = battle.attackerCur.getFrontRow();
@@ -341,6 +358,8 @@ var Unit = (function () {
 
         this.posX = posX;
         this.posRow = posRow;
+        this.casualties = 0;
+        this.moralDamage = 0.0;
     }
     Unit.prototype.setTarget = function (oppArmy) {
         this.target = oppArmy.getUnit(this.posX, this.posRow);
@@ -386,29 +405,75 @@ var Army = (function () {
     Army.prototype.getSize = function (type) {
         var size = 0;
 
-        if (!type) {
-            return this.units.length * 1000;
-        } else {
-            for (var i = 0; i < this.units.length; i++) {
-                var unit = this.units[i];
-                if (unit.type == type) {
-                    size += unit.men;
-                }
+        for (var i = 0; i < this.units.length; i++) {
+            var unit = this.units[i];
+
+            if (!type || unit.type == type) {
+                size += unit.men;
             }
-            return size;
         }
+
+        return size;
     };
 
-    Army.prototype.getMoral = function () {
+    Army.prototype.getMoral = function (type) {
         var moral = 0.0;
 
         for (var i = 0; i < this.units.length; i++) {
             var unit = this.units[i];
 
-            moral += unit.moral;
+            if (!type || unit.type == type) {
+                moral += unit.moral;
+            }
         }
 
         return moral / this.units.length;
+    };
+
+    Army.prototype.getMenDayLoss = function (type) {
+        var result = 0;
+
+        for (var i = 0; i < this.units.length; i++) {
+            var unit = this.units[i];
+
+            if (!type || unit.type == type) {
+                result += unit.casualties;
+            }
+        }
+
+        return result;
+    };
+
+    Army.prototype.getMoralDayLoss = function (type) {
+        var sum = 0;
+
+        for (var i = 0; i < this.units.length; i++) {
+            var unit = this.units[i];
+
+            if (!type || unit.type == type) {
+                sum += unit.moralDamage;
+            }
+        }
+
+        return sum / this.units.length;
+    };
+
+    Army.prototype.getMenCumLoss = function (type) {
+        var sum = 0;
+
+        for (var i = 0; i < this.units.length; i++) {
+            var unit = this.units[i];
+
+            if (!type || unit.type == type) {
+                sum += 1000;
+            }
+        }
+
+        return sum - this.getSize(type);
+    };
+
+    Army.prototype.getMoralCumLoss = function (type) {
+        return this.moralMax - this.getMoral(type);
     };
 
     Army.prototype.getUnit = function (x, row) {
