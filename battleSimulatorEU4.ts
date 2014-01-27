@@ -122,9 +122,6 @@ function updatePipsDefArt() {
   (<HTMLInputElement> document.getElementsByName("defArtShockDef")[0]).value = valArray[5];
 } // updatePipsAttArt
 
-function reset() {
-} // reset
-
 function parseDiceSequence(diceSequence: string) {
   var diceArrayText = diceSequence.split(",");
   var diceArray: number[] = [];
@@ -302,10 +299,30 @@ function show() {
   document.getElementById("attCurArt").innerHTML = battle.attackerCur.getSize("art").toString();
   document.getElementById("attCurMoral").innerHTML = battle.attackerCur.getMoral().toFixed(2);
 
+  document.getElementById("attDayInf").innerHTML = battle.attackerCur.getMenDayLoss("inf").toString();
+  document.getElementById("attDayCav").innerHTML = battle.attackerCur.getMenDayLoss("cav").toString();
+  document.getElementById("attDayArt").innerHTML = battle.attackerCur.getMenDayLoss("art").toString();
+  document.getElementById("attDayMoral").innerHTML = battle.attackerCur.getMoralDayLoss().toFixed(2);
+
+  document.getElementById("attCumInf").innerHTML = battle.attackerCur.getMenCumLoss("inf").toString();
+  document.getElementById("attCumCav").innerHTML = battle.attackerCur.getMenCumLoss("cav").toString();
+  document.getElementById("attCumArt").innerHTML = battle.attackerCur.getMenCumLoss("art").toString();
+  document.getElementById("attCumMoral").innerHTML = battle.attackerCur.getMoralCumLoss().toFixed(2);
+
   document.getElementById("defCurInf").innerHTML = battle.defenderCur.getSize("inf").toString();
   document.getElementById("defCurCav").innerHTML = battle.defenderCur.getSize("cav").toString();
   document.getElementById("defCurArt").innerHTML = battle.defenderCur.getSize("art").toString();
   document.getElementById("defCurMoral").innerHTML = battle.defenderCur.getMoral().toFixed(2);
+
+  document.getElementById("defDayInf").innerHTML = battle.defenderCur.getMenDayLoss("inf").toString();
+  document.getElementById("defDayCav").innerHTML = battle.defenderCur.getMenDayLoss("cav").toString();
+  document.getElementById("defDayArt").innerHTML = battle.defenderCur.getMenDayLoss("art").toString();
+  document.getElementById("defDayMoral").innerHTML = battle.defenderCur.getMoralDayLoss().toFixed(2);
+
+  document.getElementById("defCumInf").innerHTML = battle.defenderCur.getMenCumLoss("inf").toString();
+  document.getElementById("defCumCav").innerHTML = battle.defenderCur.getMenCumLoss("cav").toString();
+  document.getElementById("defCumArt").innerHTML = battle.defenderCur.getMenCumLoss("art").toString();
+  document.getElementById("defCumMoral").innerHTML = battle.defenderCur.getMoralCumLoss().toFixed(2);
 
   document.getElementById("attBackRow").innerHTML = battle.attackerCur.getBackRow();
   document.getElementById("attFrontRow").innerHTML = battle.attackerCur.getFrontRow();
@@ -364,6 +381,8 @@ class Unit {
 
     this.posX = posX;
     this.posRow = posRow;
+    this.casualties = 0;
+    this.moralDamage = 0.0;
   } // constructor
 
   setTarget(oppArmy: Army) {
@@ -374,8 +393,8 @@ class Unit {
     this.men -= this.casualties;
     this.men = Math.max(this.men, 0);
 
+    this.moralDamage += 0.01; // patch 1.4
     this.moral -= this.moralDamage;
-    this.moral -= 0.01; // patch 1.4
     this.moral = Math.max(this.moral, 0);
   } // applyDamage
 } // Unit
@@ -424,31 +443,76 @@ class Army {
   getSize(type?: string): number {
     var size = 0;
 
-    if (!type) {
-      return this.units.length * 1000;
-    }
-    else {
-      for (var i = 0; i < this.units.length; i++) {
-        var unit = this.units[i];
-        if (unit.type == type) {
-          size += unit.men;
-        }
-      } // for i
-      return size;
-    }
+    for (var i = 0; i < this.units.length; i++) {
+      var unit = this.units[i];
+
+      if (!type || unit.type == type) {
+        size += unit.men;
+      }
+    } // for i
+
+    return size;
   } // getSize
 
-  getMoral(): number {
+  getMoral(type?: string): number {
     var moral = 0.0;
 
     for (var i = 0; i < this.units.length; i++) {
       var unit = this.units[i];
 
-      moral += unit.moral;
+      if (!type || unit.type == type) {
+        moral += unit.moral;
+      }
     } // for i
 
     return moral / this.units.length;
-  }
+  } // getMoral
+
+  getMenDayLoss(type?: string): number {
+    var result = 0;
+
+    for (var i = 0; i < this.units.length; i++) {
+      var unit = this.units[i];
+
+      if (!type || unit.type == type) {
+        result += unit.casualties;
+      }
+    } // for i
+
+    return result;
+  } // getMenDayLoss
+
+  getMoralDayLoss(type?: string): number {
+    var sum = 0;
+
+    for (var i = 0; i < this.units.length; i++) {
+      var unit = this.units[i];
+
+      if (!type || unit.type == type) {
+        sum += unit.moralDamage;
+      }
+    } // for i
+
+    return sum / this.units.length;
+  } // getMoralDayLoss
+
+  getMenCumLoss(type?: string): number {
+    var sum = 0;
+
+    for (var i = 0; i < this.units.length; i++) {
+      var unit = this.units[i];
+
+      if (!type || unit.type == type) {
+        sum += 1000;
+      }
+    } // for i
+
+    return sum - this.getSize(type);
+  } // getMenCumLoss
+
+  getMoralCumLoss(type?: string): number {
+    return this.moralMax - this.getMoral(type);
+  } // getMenCumLoss
 
   getUnit(x, row): Unit {
     for (var i = 0; i < this.units.length; i++) {
@@ -547,7 +611,7 @@ class Battle {
     this.defenderCur = defender;
 
     this.days = 0;
-    this.phase = "fire";
+    this.phase = "shock";
     this.dieRoll();
     this.attackerCur.setTargets(this.defenderCur);
     this.defenderCur.setTargets(this.attackerCur);
@@ -556,19 +620,16 @@ class Battle {
   nextDay() {
     this.days += 1;
 
-    if (this.days % 3 == 0) {
+    if ((this.days - 1) % 3 == 0) {
       if (this.phase == "fire") {
         this.phase = "shock";
-        this.attackerCur.setTargets(this.defenderCur);
-        this.defenderCur.setTargets(this.attackerCur);
-        this.dieRoll();
       }
       else {
         this.phase = "fire";
-        this.attackerCur.setTargets(this.defenderCur);
-        this.defenderCur.setTargets(this.attackerCur);
-        this.dieRoll();
       }
+      this.attackerCur.setTargets(this.defenderCur);
+      this.defenderCur.setTargets(this.attackerCur);
+      this.dieRoll();
     }
 
     // Calcul des dommages =============================================================
@@ -644,7 +705,8 @@ class Battle {
   } // dieRoll
 
   dieResult(die: number, attLead: number, defLead: number, attPips: number, defPips: number, terMod: number): number {
-    var result = die + (attLead - defLead) + (attPips - defPips) - terMod;
+    var difLead = Math.max(attLead - defLead, 0);
+    var result = die + difLead + (attPips - defPips) + terMod;
     return result;
   } // dieResult
 
@@ -706,10 +768,11 @@ class Battle {
   }
 
   moralDamage(baseCasualties: number, men: number, moralMax: number, combatAbility: number, discipline: number, tactics: number): number {
+    //alert(baseCasualties + ", " + men / 1000 + ", " + moralMax + ", " + combatAbility + ", " + discipline + ", " + tactics);
     return baseCasualties * 0.01 / 6 * men / 1000 * moralMax * (100 + combatAbility) / 100 * (discipline / 100) / tactics;
   }
 
-  computeDamage(unit: Unit, attDie: number, leadAttSkill: number, leadDefSkill: number, attMoralMax: number, terMod: number) {
+  computeDamage(unit: Unit, die: number, leadAttSkill: number, leadDefSkill: number, attMoralMax: number, terMod: number) {
     var attPipsM = unit.moralOff;
     var defPipsM = unit.target.moralDef;
 
@@ -724,19 +787,20 @@ class Battle {
       var attMod = unit.shockMod;
     }
 
-    var dieResultC = this.dieResult(attDie, leadAttSkill, leadDefSkill, attPips, defPips, terMod);
-    var dieResultM = this.dieResult(attDie, leadAttSkill, leadDefSkill, attPipsM, defPipsM, terMod);
+    var dieResultC = this.dieResult(die, leadAttSkill, leadDefSkill, attPips, defPips, terMod);
+    var dieResultM = this.dieResult(die, leadAttSkill, leadDefSkill, attPipsM, defPipsM, terMod);
     console.log("dieResult : " + unit.id + " : " + dieResultC + ", " + dieResultM);
 
     var baseCasualtiesC = this.baseCasualties(dieResultC);
     var baseCasualtiesM = this.baseCasualties(dieResultM);
     console.log("baseCasualties : " + unit.id + " : " + baseCasualtiesC + ", " + baseCasualtiesM);
 
-    unit.casualties = this.casualties(baseCasualtiesC, unit.men, attMod, unit.ability, unit.discipline, unit.target.tactics);
-    unit.casualties *= Math.round(1 + (this.days - 1) / 100);
+    unit.target.casualties = this.casualties(baseCasualtiesC, unit.men, attMod, unit.ability, unit.discipline, unit.target.tactics);
+    unit.target.casualties *= Math.round(1 + (this.days - 1) / 100);
 
-    unit.moralDamage = this.moralDamage(baseCasualtiesM, unit.men, attMoralMax, unit.ability, unit.discipline, unit.target.tactics);
-    unit.moralDamage *= 1.1; // patch 1.4
-    console.log("damage : " + unit.id + " : " + unit.casualties + ", " + unit.moralDamage);
+    unit.target.moralDamage = this.moralDamage(baseCasualtiesM, unit.men, attMoralMax, unit.ability, unit.discipline, unit.target.tactics);
+    unit.target.moralDamage *= 1.1; // patch 1.4
+
+    console.log("damage : " + unit.target.id + " : " + unit.target.casualties + ", " + unit.target.moralDamage);
   } // computeDamage
 } // Battle
