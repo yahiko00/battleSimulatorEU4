@@ -28,6 +28,9 @@ img {
 .center {
   text-align: center;
 }
+.left {
+  text-align: left;
+}
 
 form {
   text-align: left;
@@ -51,4 +54,13 @@ select, option { width: __; }
 
 select {
   width: 10em;
+}
+
+.lineText {
+  text-align: left;
+  width: 10em;
+}
+
+.row {
+  font-family: 'Courier New';
 }
