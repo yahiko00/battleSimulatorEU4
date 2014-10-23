@@ -1,0 +1,35 @@
+﻿EU4
+Att: 160   0.31
+Def: 140   0.17
+
+Simulator
+Att: 240   0.69
+Def: 150   0.47
+
+Attacker (Cherokees)
+die result C = 9 + (0 - 2) + (0 - 0) - 1 = 6
+die result M = 9 + (0 - 2) + (1 - 0) - 1 = 7
+
+Defender (Powhatans)
+die result C = 7 + (2 - 0) + (0 - 0) - 0 = 9
+die result M = 7 + (2 - 0) + (1 - 0) - 0 = 10
+
+Attacker (Cherokees)
+base casualties C = 50
+base casualties M = 60
+
+Defender (Powhatans)
+base casualties C = 80
+base casualties M = 90
+
+Attacker (Cherokees)
+casualties = 50 * 1 * 0.25 * (1 + 0) * 1 / 0.5 = 25
+moralDamage = 60 * 0.01 / 6 * 1 * 2.08 * (1 + 0) * 1 / 0.5 = 0.416
+
+Defender (Powhatans)
+casualties = 80 * 1 * 0.25 * (1 + 0) * 1 / 0.5 = 40
+moralDamage = 90 * 0.01 / 6 * 1 * 2.06 * (1 + 0) * 1 / 0.5 = 0.618
+
+============================================
+unit
+id, type, men, casualties, moral, moralDamage, posX, posRow, target
